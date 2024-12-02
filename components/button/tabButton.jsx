@@ -24,7 +24,7 @@ const Tabs = ({tabs, initialIndex = 0, onChange, children}) => {
                     </button>
                 ))}
             </div>
-            <div role="tabpanel" className="mt-4">
+            <div role="tabpanel">
                 {children[activeIndex]}
             </div>
         </div>
