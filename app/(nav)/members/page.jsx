@@ -1,7 +1,7 @@
 const Member = () => {
   return (
     <div>
-      회원 관리 페이지
+      이용자 관리 페이지
     </div>
   );
 }
