@@ -2,9 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/pretendard/Pretendard-Medium.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* 기본 색상 팔레트 */
+  --nav-background: #2C2C2C;
+  --primary-color: #3081F7; /* 기본 색상 */
+  --primary-text: #FFFFFF; /* 기본 글꼴 색상 */
+  --secondary-color: #E7F2FE; /* 기타 색상 */
+  --secondary-text: #0B5CD8; /* 기타 글꼴 색상 */
+
+  /* 내용 색상 팔레트 */
+  --content-base: #000000; /* 기본 색상 */
+  --content-highlight: #3081F7; /* 기본 강조 색상 */
+  --content-secondary-1: #E3E4E8; /* 기타 색상 1 */
+  --content-secondary-2: #F2F4F6; /* 기타 색상 2 */
+  --content-secondary-3: #D5D5D5; /* 기타 색상 3 */
+  --content-accent-1: #43505E; /* 기타 강조 색상 1 */
+  --content-accent-2: #B8B8B8; /* 기타 강조 색상 2 */
+  --content-accent-3: #787B7E; /* 기타 강조 색상 3 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,5 +41,6 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Pretendard';
 }
+
