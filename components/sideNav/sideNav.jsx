@@ -20,7 +20,7 @@ const SideNav = async () => {
                   <NavMenuItem menuName={"이용자 관리"} menuHref={"members"} iconSrc={"/icons/user.png"}/>
                   <NavMenuItem menuName={"카드 관리"} menuHref={"cards"} iconSrc={"/icons/card.png"}/>
                   <NavMenuItem menuName={"가맹점 관리"} menuHref={"franchises"} iconSrc={"/icons/franchise.png"}/>
-                  <NavMenuItem menuName={"대시보드"} menuHref={"https://grafana.com/products/cloud/"}
+                  <NavMenuItem menuName={"대시보드"} menuHref={process.env.NEXT_PUBLIC_GRAFANA}
                                iconSrc={"/icons/dashboard.png"}/>
                   <NavMenuItem menuName={"환경설정"} menuHref={"setting"} iconSrc={"/icons/setting.png"}/>
               </ul>
