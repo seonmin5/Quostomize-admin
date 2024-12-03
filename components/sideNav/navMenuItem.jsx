@@ -8,8 +8,8 @@ const NavMenuItem = ({menuName, menuHref, iconSrc}) => {
       <Link
           href={menuHref}
           className="flex items-center space-x-4 text-base font-bold px-8 py-4 text-[#FFFFFF] hover:bg-[#3081F7] transition-colors"
-            target={menuHref.startsWith("https") ? '_blank' : '_self'}
-            rel={menuHref.startsWith("https") ? 'noopener noreferrer' : ''}>
+            target={menuHref.startsWith("http") ? '_blank' : '_self'}
+            rel={menuHref.startsWith("http") ? 'noopener noreferrer' : ''}>
         <Image src={iconSrc}
                alt={menuName}
                width={24}
