@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Medium.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
 
 :root {
   --background: #ffffff;
@@ -41,6 +35,5 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Pretendard';
 }
 

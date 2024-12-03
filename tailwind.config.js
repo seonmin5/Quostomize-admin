@@ -30,6 +30,9 @@ module.exports = {
           accent3: 'var(--content-accent-3)',
         },
       },
+      fontFamily: {
+        pretendard: ["var(--font-pretendard)", "sans-serif"],
+      },
     },
   },
   plugins: [],
