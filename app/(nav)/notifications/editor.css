@@ -1,0 +1,13 @@
+.quill {
+    overflow-y: auto !important;
+    max-height: 500px !important;
+    height: 400px !important;
+}
+
+.ql-container {
+    height: 350px !important;
+}
+
+.ql-toolbar {
+    background-color: #E3E4E8;
+}
