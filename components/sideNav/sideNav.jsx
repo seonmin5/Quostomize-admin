@@ -1,6 +1,9 @@
 import NavMenuItem from "./navMenuItem";
+import { auth } from "../../auth"
 
 const SideNav = async () => {
+  const session = await auth();
+
   return (
       <div className="w-60 min-h-screen bg-[#2C2C2C]">
           <div className="p-8 border-b border-[#000000] text-white">
@@ -9,8 +12,8 @@ const SideNav = async () => {
                       WON 커스터마이징
                   </div>
               </div>
-              <div className="text-gray-300 text-sm">로그인한 사용자 이름</div>
-              <div className="text-gray-300 text-sm">로그인한 사용자 아이디</div>
+              <div className="text-gray-300 text-sm">{session.memberName}</div>
+              <div className="text-gray-300 text-sm">{session.memberLoginId}</div>
           </div>
           <div className="">
               <h2 className="pt-8 pr-8 pl-8 pb-6 font-bold text-white text-lg">사이트 관리</h2>
