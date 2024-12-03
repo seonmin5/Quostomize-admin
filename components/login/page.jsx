@@ -1,28 +1,27 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
-import LoadingModal from '@/components/modal/loadingModal';
-import LoginForm from '../components/login/LoginForm';
-import AlertModal from '../components/modal/alertModal';
+import LoginForm from './LoginForm';
+import LoginLoading from './LoginLoading';
+import ErrorModal from './ErrorModal';
 
 const LoginPage = () => {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [formData, setFormData] = useState({
     memberLoginId: '',
     memberPassword: '',
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setSuccess] = useState(false);
 
   useEffect(() => {
     if (session) {
-      console.log(session);
-      router.push('/information');
+      router.push('/home');
     }
   }, [session, router]);
 
@@ -32,7 +31,7 @@ const LoginPage = () => {
     );
   }, [formData]);
 
-
+  let redirectTo = searchParams.get('to') ? '/' + searchParams.get('to') : '/home';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,20 +45,19 @@ const LoginPage = () => {
         redirect: false,
       });
       if (response.error) {
-        setSuccess(false);
-        setTimeout(() => {
-          setShowAlertModal(true);
-          isAuthed = false;
-        },0)
-      } else {
-        setSuccess(true);
-
+        setShowErrorModal(true);
+        isAuthed = false;
       }
     } catch (err) {
       isAuthed = false;
-      setShowAlertModal(true);
+      setShowErrorModal(true);
     } finally {
       setIsLoading(false);
+      if (isAuthed) {
+        if (isAuthed) {
+          router.push(redirectTo);
+        }
+      }
     }
   };
 
@@ -74,11 +72,11 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen">
       <div className="w-full px-6 pt-12 pb-28">
-        <div className="mx-auto">
-          <h1 className="text-3xl font-bold color1 mb-3 text-center">
-            커스터마이징 카드 관리자 페이지
+        <div className="max-w-md mx-auto">
+          <h1 className="text-3xl font-bold color1 mb-3">
+            커스터마이징 카드
           </h1>
-          <p className="text-base text-gray-900 text-center">
+          <p className="text-base text-gray-900">
             서비스 이용을 위해 로그인해주세요.
           </p>
         </div>
@@ -95,21 +93,31 @@ const LoginPage = () => {
                 isFormValid={isFormValid}
                 onSubmit={handleLogin}
               />
+              <div className="mt-6 flex items-center justify-center space-x-4 text-sm">
+                <button className="text-gray-500 hover:text-blue-500 transition-colors duration-200">
+                  아이디 찾기
+                </button>
+                <span className="text-gray-300">|</span>
+                <button className="text-gray-500 hover:text-blue-500 transition-colors duration-200">
+                  비밀번호 찾기
+                </button>
+                <span className="text-gray-300">|</span>
+                <button
+                  onClick={() => router.push('/signup')}
+                  className="text-gray-500 hover:text-blue-500 transition-colors duration-200"
+                >
+                  회원가입
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {isLoading && <LoadingModal message={"로그인 중입니다"} />}
-      <AlertModal
-        isOpen={showAlertModal}
-        onClose={() => {
-            setSuccess(false)
-            setShowAlertModal(false)
-          }
-        }
-        title={"로그인"}
-        isSuccess={isSuccess}
+      {isLoading && <LoginLoading />}
+      <ErrorModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
       />
     </div>
   );
