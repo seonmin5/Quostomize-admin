@@ -25,6 +25,11 @@ const modules = {
 const Notifications = () => {
   const [title, setTitle] = useState("");
   const [htmlContents, setHtmlContents] = useState("");
+  const [optinalTerms, setOptinalTerms] = useState(-1);
+  const [isSuccess, setSuccess] = useState(true);
+
+  const [modalOpen, setModalOpen] = useState(false); 
+  const [modalMessage, setModalMessage ] = useState(""); 
 
   const updateTitle = (event) => {
     const newTitle = event.target.value;
@@ -35,6 +40,51 @@ const Notifications = () => {
 
   const updateContents = (newContents) => {
     setHtmlContents(newContents);
+  }
+
+  const makeHtmlFile = () => {
+    const blob = new Blob(htmlContents, {type: "text/html"});
+    return blob;
+  }
+
+  const openModal = (modalMessage) => {
+    setModalMessage(modalMessage);
+    setTimeout(() => {
+      setModalOpen(true);
+    },0)
+  }
+
+  const sendMail = async () => {
+    const htmlFile = makeHtmlFile();
+    const response = await fetch("/api/mail", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+      cache: "no-store",
+      body: JSON.stringify({
+        title: title,
+        optinalTerms: optinalTerms,
+        htmlFile: htmlFile
+      })
+    })
+
+    if (response.status === 400 || response.status === 200) {
+      const result = await response.json();
+      if (response.status === 400) {
+        setSuccess(false);
+      } else {
+        setSuccess(true);
+      }
+      setTimeout(() => {
+        openModal(result.message);
+      }, 0)
+    }
+
+    if (response.status >= 401 && response.status <= 403) {
+      redirect(response.url); 
+    }
   }
 
   const importantStyle = {
@@ -48,6 +98,7 @@ const Notifications = () => {
       <div className=' mt-6 px-10 flex justify-end'>
         <div 
           className='cursor-pointer bg-primary font-semibold text-white w-32 h-10 text-center leading-10 align-middle rounded-lg'
+          onClick={() => sendMail()}
         >
           알림 보내기
         </div>
