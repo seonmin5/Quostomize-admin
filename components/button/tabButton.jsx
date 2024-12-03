@@ -1,8 +1,10 @@
 'use client'
 import {useState} from "react";
+import React from "react";
 
 const Tabs = ({tabs, initialIndex = 0, onChange, children}) => {
     const [activeIndex, setActiveIndex] = useState(initialIndex);
+    const normalizedChildren = React.Children.toArray(children);
     const handleTabClick = (index) => {
         setActiveIndex(index);
         if (onChange) onChange(index);
@@ -25,7 +27,7 @@ const Tabs = ({tabs, initialIndex = 0, onChange, children}) => {
                 ))}
             </div>
             <div role="tabpanel">
-                {children[activeIndex]}
+                {normalizedChildren[activeIndex]}
             </div>
         </div>
     )
