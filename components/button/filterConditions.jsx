@@ -89,7 +89,7 @@ const FilterConditions = ({currentPage}) => {
                 {currentPage === 'members' && (
                     <div>
                         <label className="block text-sm font-bold">회원 역할</label>
-                        {['ROLE_MEMBER', 'ROLE_OM', 'ROLE_ADMIN', 'ROLE_SM'].map(role => (
+                        {['ROLE_MEMBER', 'ROLE_OM', 'ROLE_SM'].map(role => (
                             <div key={role}>
                                 <input
                                     type="checkbox"
