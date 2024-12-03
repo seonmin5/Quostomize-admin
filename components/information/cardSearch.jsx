@@ -11,6 +11,7 @@ import { LocalDate, LocalDateTime } from 'js-joda'; // 날짜 처리를 위한 �
 
 const CardSearchPage = () => {
 
+    // Dummy Data
     const data = [
         {
             cardSequenceId: 12345678,
@@ -42,7 +43,7 @@ const CardSearchPage = () => {
         }
     ];
 
-    // Columns 정의
+    // Columns
     const columns = [
         {
             Header: 'Card Sequence ID',
