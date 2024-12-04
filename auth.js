@@ -123,13 +123,18 @@ export const authConfig = {
         const refreshToken = setCookie[0].split("=")[1];
         const expires = setCookie[2].split("=")[1];
         const path = setCookie[3].split("=")[1];
-        
+
         const result = await response.json();
-        
+        const memberId = result.memberId;
+        const memberRole = result.memberRole;
+        const memberName = result.memberName;
+        const memberLoginId = credentials.memberLoginId;
 
         const user = {
-          id: accessToken,
-          name: credentials.memberLoginId,
+          id: memberId,
+          name: memberName,
+          loginId: memberLoginId,
+          role: memberRole,
           accessToken: accessToken,
           refreshToken: refreshToken,
           accessExpires: new Date().valueOf() + 1800000,
@@ -151,7 +156,10 @@ export const authConfig = {
     async jwt({ token, account, user }) {
       if (account && user) {
         return {
-          ...token,
+          memberId: user.id,
+          memberName: user.name,
+          memberLoginId: user.loginId,
+          memberRole: user.role,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
           accessExpires: user.accessExpires,
@@ -183,6 +191,10 @@ export const authConfig = {
 
     async session({ session, token }) {
       if (token) {
+        session.memberId = token.memberId;
+        session.memberName = token.memberName;
+        session.memberLoginId = token.memberLoginId;
+        session.memberRole = token.memberRole;
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.accessExpires = token.accessExpires;
