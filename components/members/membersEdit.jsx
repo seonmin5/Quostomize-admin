@@ -6,7 +6,7 @@ import {useState} from "react";
 
 // test
 import CheckBoxTable from "../../components/table/checkBoxTable"
-import { LocalDateTime } from 'js-joda';
+import { LocalDateTime } from '@js-joda/core';
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 
 const MembersEditPage = () => {
