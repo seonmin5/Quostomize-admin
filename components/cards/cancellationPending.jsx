@@ -2,59 +2,88 @@
 import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
 import PendingConditions from "../../components/button/pendingConditions";
-import {useState} from "react";
-
-// test
+import {useEffect, useState} from "react";
 import CheckBoxTable from "../../components/table/checkBoxTable"
-import {LocalDate, LocalDateTime} from '@js-joda/core';
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 
 const CancellationPendingPage = () => {
-    // Dummy Data
-    const data = [
-        {
-            cardSequenceId: 12345678,
-            cardNumber: '1234-5678-9012-3456',
-            cardBrand: 1,
-            isAppCard: true,
-            isForeignBlocked: false,
-            isPostpaidTransport: true,
-            expirationDate: LocalDate.parse('2025-12-31'),
-            optionalTerms: 12,
-            paymentReceiptMethods: 2,
-            cardStatus: 'CANCELLATION_PENDING',
-            createdAt: LocalDateTime.parse('2024-01-01T12:00:00'),
-            modifiedAt: LocalDateTime.parse('2024-01-02T12:00:00'),
-        },
-        {
-            cardSequenceId: 87654321,
-            cardNumber: '9876-5432-1098-7654',
-            cardBrand: 2,
-            isAppCard: false,
-            isForeignBlocked: true,
-            isPostpaidTransport: false,
-            expirationDate: LocalDate.parse('2026-06-30'),
-            optionalTerms: 6,
-            paymentReceiptMethods: 1,
-            cardStatus: 'CANCELLATION_PENDING',
-            createdAt: LocalDateTime.parse('2023-12-15T10:30:00'),
-            modifiedAt: LocalDateTime.parse('2023-12-16T10:30:00'),
-        }
-    ];
+    const [cardData, setCardData] = useState([]);
+    const [error, setError] = useState(null);
 
-    // Columns
+    const fetchCardData = async () => {
+        try {
+            const response = await fetch('api/cards/cancellationPending', {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setCardData(data.data);
+        } catch (error) {
+            console.error('Error - 카드 불러오기: ', error.message);
+            setError(error.message);
+        }
+    }
+
+    useEffect(() => {
+        fetchCardData();
+    }, []);
+
+    const [showFilter, setShowFilter] = useState(false);
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    console.log("cardData", cardData);
+
+    const data = Array.isArray(cardData.content)
+        ? cardData.content.map((item, index) => ({
+            number: index + 1,  // 넘버링 (1부터 시작)
+            cardBrand: item.cardBrand || '',
+            cardNumber: item.cardNumber || '',
+            cardSequenceId: item.cardSequenceId || '',
+            cardStatus: item.cardStatus || '',
+            expirationDate: item.expirationDate || '',
+            isAppCard: item.isAppCard || '',
+            isForeignBlocked: item.isForeignBlocked || '',
+            isPostpaidTransport: item.isPostpaidTransport || '',
+            optionalTerms: item.optionalTerms || '',
+            paymentReceiptMethods: item.paymentReceiptMethods || '',
+            modifiedAt: item.modifiedAt || '',
+            createdAt: item.createdAt || '',
+        }))
+        : [];
+
     const columns = [
         {
-            Header: 'Card Sequence ID',
-            accessor: 'cardSequenceId',
+            Header: 'No',
+            accessor: 'number',
+        },
+        {
+            Header: 'Card Brand',
+            accessor: 'cardBrand',
         },
         {
             Header: 'Card Number',
             accessor: 'cardNumber',
         },
         {
-            Header: 'Card Brand',
-            accessor: 'cardBrand',
+            Header: 'Card Sequence ID',
+            accessor: 'cardSequenceId',
+        },
+        {
+            Header: 'Card Status',
+            accessor: 'cardStatus',
+        },
+        {
+            Header: 'Expiration Date',
+            accessor: 'expirationDate',
         },
         {
             Header: 'Is App Card',
@@ -69,10 +98,6 @@ const CancellationPendingPage = () => {
             accessor: 'isPostpaidTransport',
         },
         {
-            Header: 'Expiration Date',
-            accessor: 'expirationDate',
-        },
-        {
             Header: 'Optional Terms',
             accessor: 'optionalTerms',
         },
@@ -81,25 +106,27 @@ const CancellationPendingPage = () => {
             accessor: 'paymentReceiptMethods',
         },
         {
-            Header: 'Card Status',
-            accessor: 'cardStatus',
+            Header: 'Modified At',
+            accessor: 'modifiedAt',
         },
         {
             Header: 'Created At',
             accessor: 'createdAt',
         },
-        {
-            Header: 'Modified At',
-            accessor: 'modifiedAt',
-        },
     ];
 
-    const [showFilter, setShowFilter] = useState(false);
-    const [selectedRows, setSelectedRows] = useState([]);
 
     const handleSearch = (query) => {
         console.log(`검색어: ${query}`);
     };
+
+    if (error) {
+        return <div>에러가 발생했습니다: {error}</div>;
+    }
+
+    if (!cardData) {
+        return <div>로딩 중</div>;
+    }
 
     const toggleFilter= () => {
         setShowFilter((prev) => !prev);
