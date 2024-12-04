@@ -7,7 +7,7 @@ import {useState} from "react";
 
 // test
 import DataTable from "../../components/table/dataTable";
-import { LocalDate, LocalDateTime } from 'js-joda'; // 날짜 처리를 위한 패키지 임포트
+import { LocalDate, LocalDateTime } from '@js-joda/core';
 
 const CardSearchPage = () => {
 

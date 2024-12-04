@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
+
 import LoadingModal from '@/components/modal/loadingModal';
 import LoginForm from '../components/login/LoginForm';
 import AlertModal from '../components/modal/alertModal';
@@ -72,8 +73,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="w-full px-6 pt-12 pb-28">
+    <div className="flex flex-col min-h-screen justify-center bg-cover" style={{backgroundImage: "url(/images/login-background.jpg)"}}>
+      <div className="w-full shrink-0 px-6 pt-12 pb-20">
         <div className="mx-auto">
           <h1 className="text-3xl font-bold color1 mb-3 text-center">
             커스터마이징 카드 관리자 페이지
@@ -84,8 +85,7 @@ const LoginPage = () => {
         </div>
       </div>
 
-      <div className="relative">
-        <div className="absolute inset-x-0 -top-20">
+      <div className="shrink-0">
           <div className="max-w-lg mx-auto px-5">
             <div className="bg-white rounded-3xl shadow-xl p-8">
               <h2 className="text-2xl font-bold text-center mb-8">로그인</h2>
@@ -97,7 +97,6 @@ const LoginPage = () => {
               />
             </div>
           </div>
-        </div>
       </div>
 
       {isLoading && <LoadingModal message={"로그인 중입니다"} />}

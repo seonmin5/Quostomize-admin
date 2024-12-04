@@ -128,11 +128,12 @@ export const authConfig = {
         const memberId = result.memberId;
         const memberRole = result.memberRole;
         const memberName = result.memberName;
-        
+        const memberLoginId = credentials.memberLoginId;
 
         const user = {
           id: memberId,
           name: memberName,
+          loginId: memberLoginId,
           role: memberRole,
           accessToken: accessToken,
           refreshToken: refreshToken,
@@ -156,7 +157,8 @@ export const authConfig = {
       if (account && user) {
         return {
           memberId: user.id,
-          memberName: user.memberName,
+          memberName: user.name,
+          memberLoginId: user.loginId,
           memberRole: user.role,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
@@ -191,6 +193,7 @@ export const authConfig = {
       if (token) {
         session.memberId = token.memberId;
         session.memberName = token.memberName;
+        session.memberLoginId = token.memberLoginId;
         session.memberRole = token.memberRole;
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
