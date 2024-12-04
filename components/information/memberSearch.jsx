@@ -43,12 +43,12 @@ const MemberSearchPage = () => {
         <div>
             <div className="p-6">
                 <div className="flex space-x-10 items-center justify-end">
-                    <SearchBar onSearch={handleSearch} />
+                    <SearchBar onSearch={handleSearch} placeholder="이용자 아이디를 입력해주세요" />
                     <FilterButton onClick={toggleFilter} />
                 </div>
                 {showFilter && (
                     <div className="absolute right-6 z-10">  {/* 필터 패널의 위치 조정 */}
-                        <FilterConditions currentPage="members" setFilterData={setFilterData} page={page} setPage={setPage} />
+                        <FilterConditions currentPage="members" setFilterData={setFilterData} page={page} setPage={setPage} dataPage={memberInfos.totalPage} />
                     </div>
                 )}
             </div>

@@ -45,12 +45,12 @@ const CardSearchPage = () => {
         <div>
             <div className="p-6">
                 <div className="flex space-x-10 items-center justify-end">
-                    <SearchBar onSearch={handleSearch} />
+                    <SearchBar onSearch={handleSearch} placeholder="카드번호를 입력해주세요" />
                     <FilterButton onClick={toggleFilter} />
                 </div>
                 {showFilter && (
                     <div className="absolute right-6 z-10">  {/* 필터 패널의 위치 조정 */}
-                        <FilterConditions currentPage="cards" setFilterData={setFilterData} page={page} setPage={setPage} />
+                        <FilterConditions currentPage="cards" setFilterData={setFilterData} page={page} setPage={setPage} dataPage={cardInfos.totalPage} />
                     </div>
                 )}
             </div>

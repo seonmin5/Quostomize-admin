@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const SearchBar = ({ placeholder = "여기에 내용을 검색해 보세요", onSearch, children }) => {
+const SearchBar = ({ placeholder, onSearch, children }) => {
     const [query, setQuery] = useState("");
     const handleInputChange = (e) => {
         setQuery(e.target.value);
