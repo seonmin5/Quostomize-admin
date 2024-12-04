@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import SubmitButton from "../../components/button/submitButton";
 
-const FilterConditions = ({ currentPage, setFilterData, page, setPage }) => {
+const FilterConditions = ({ currentPage, setFilterData, page, setPage, dataPage }) => {
     const [sortDirection, setSortDirection] = useState("DESC");
     const [status, setStatus] = useState("");
     const [memberRole, setMemberRole] = useState([]);
@@ -47,6 +47,7 @@ const FilterConditions = ({ currentPage, setFilterData, page, setPage }) => {
                             onChange={handlePageChange}
                             className="w-full p-2 border rounded-md"
                             min="1"
+                            max={dataPage}
                         />
                     </div>
                 )}
