@@ -4,19 +4,24 @@ import { auth } from "../../../auth";
 export async function POST(request) {
   const session = await auth();
   const accessToken = session.accessToken;
-  const requestbody = request.body;
+  const formData = await request.formData();
+
+  const backendFormData = new FormData();
+  backendFormData.append('title', formData.get('title'));
+  backendFormData.append('optionalTerms', formData.get('optionalTerms'));
+  backendFormData.append('htmlFile', formData.get('htmlFile'));
 
   const response = await fetch(
     `${process.env.SERVER_URL}/v1/api/admin/email`,
     {
         method: "POST",
         headers: {
-            "Content-type": "application/json",
             "Authorization": `Bearer ${accessToken}`
         },
         credentials: "include",
         cache: "no-store",
-        body: requestbody
+        duplex: "half",
+        body: backendFormData
     }
   );
   console.log(response);

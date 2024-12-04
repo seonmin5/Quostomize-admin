@@ -44,7 +44,12 @@ const Notifications = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   
   const handleTabClick = (index) => {
-      setActiveIndex(index);
+    if (index === 0) {
+      setOptinalTerms(-1);
+    } else {
+      setOptinalTerms(0);
+    }
+    setActiveIndex(index);
   };
 
   const updateTitle = (event) => {
@@ -56,11 +61,6 @@ const Notifications = () => {
 
   const updateContents = (newContents) => {
     setHtmlContents(newContents);
-  }
-
-  const makeHtmlFile = () => {
-    const blob = new Blob([htmlContents], {type: "text/html"});
-    return blob;
   }
 
   const onConfirm = () => {
@@ -88,19 +88,16 @@ const Notifications = () => {
 
   const sendMail = async () => {
     setLoadingModalOpen(true);
-    const htmlFile = makeHtmlFile();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('optionalTerms', optionalTerms);
+    formData.append('htmlFile', new Blob([htmlContents], {type: "text/html"}));
     const response = await fetch("/api/mail", {
       method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
       credentials: "include",
       cache: "no-store",
-      body: JSON.stringify({
-        title: title,
-        optionalTerms: parseInt(optionalTerms),
-        htmlFile: htmlFile
-      })
+      duplex: "half",
+      body: formData
     })
 
     if (response.status === 400 || response.status === 200) {
@@ -126,6 +123,7 @@ const Notifications = () => {
         },2000)
       }
     }
+    setLoadingModalOpen(false);
 
     if (response.status >= 401 && response.status <= 403) {
       redirect(response.url); 
@@ -136,7 +134,7 @@ const Notifications = () => {
     maxHeight: "500px !important",
     overflowY: "auto !important"
   }
-
+  
   return (
     <div className="pt-6 pl-8">
       <div role={"tablist"} className="flex space-x-4 border-b">
@@ -163,7 +161,7 @@ const Notifications = () => {
                 <Select 
                   name="status"
                   aria-label="Project status"
-                  className="border border-content-accent3 rounded-md text-xl bg-transparent"
+                  className="border border-content-accent3 rounded-md text-xl bg-transparent px-1"
                   onChange={(e) => setOptinalTerms(e.target.value)}
                 >
                   <option value="0">필수 약관 동의 회원</option>

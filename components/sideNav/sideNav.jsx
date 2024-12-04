@@ -1,21 +1,24 @@
 import NavMenuItem from "./navMenuItem";
-import { auth } from "../../auth"
+import { auth, signOut } from "../../auth"
 import { redirect } from "next/navigation";
 
 const SideNav = async () => {
   const session = await auth();
   if (!session) {
-    await fetch("api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json"
-        },
-        cache:"no-store",
-        credentials: "include"
-      });
-      
-    await signOut({ redirect: false });
-    redirect("/");
+    try {
+      await fetch("api/auth/logout", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          cache:"no-store",
+          credentials: "include"
+        });
+    } catch {
+
+    } finally {
+      redirect("/");
+    }
   }
 
   return (
