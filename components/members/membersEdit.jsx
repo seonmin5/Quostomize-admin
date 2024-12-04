@@ -2,68 +2,65 @@
 import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditions";
-import {useState} from "react";
-
-// test
+import {useEffect, useState} from "react";
 import CheckBoxTable from "../../components/table/checkBoxTable"
-import { LocalDateTime } from '@js-joda/core';
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 
 const MembersEditPage = () => {
-    // Dummy Data
-    const data = [
-        {
-            memberId: 1,
-            memberName: 'John Doe',
-            memberEmail: 'johndoe@example.com',
-            memberLoginId: 'john123',
-            zipCode: '12345',
-            memberAddress: '123 Main St',
-            memberDetailAddress: 'Apt 4B',
-            role: 'MEMBER',
-            createdAt: LocalDateTime.parse('2024-01-01T12:00:00'),
-            modifiedAt: LocalDateTime.parse('2024-01-02T12:00:00'),
-        },
-        {
-            memberId: 2,
-            memberName: 'Jane Smith',
-            memberEmail: 'janesmith@example.com',
-            memberLoginId: 'jane456',
-            zipCode: '67890',
-            memberAddress: '456 Oak Ave',
-            memberDetailAddress: 'Suite 101',
-            role: 'MEMBER',
-            createdAt: LocalDateTime.parse('2023-12-15T10:30:00'),
-            modifiedAt: LocalDateTime.parse('2023-12-16T10:30:00'),
-        },
-        {
-            memberId: 3,
-            memberName: 'Mark Lee',
-            memberEmail: 'marklee@example.com',
-            memberLoginId: 'mark789',
-            zipCode: '54321',
-            memberAddress: '789 Pine St',
-            memberDetailAddress: 'Room 202',
-            role: 'SUSPENDED_MEMBER',
-            createdAt: LocalDateTime.parse('2023-11-20T15:00:00'),
-            modifiedAt: LocalDateTime.parse('2023-11-21T15:00:00'),
-        },
-        {
-            memberId: 4,
-            memberName: 'Lucy Kim',
-            memberEmail: 'lucykim@example.com',
-            memberLoginId: 'lucy101',
-            zipCode: '11223',
-            memberAddress: '101 Maple Rd',
-            memberDetailAddress: 'Unit 5A',
-            role: 'OLD_MEMBER',
-            createdAt: LocalDateTime.parse('2022-06-30T08:00:00'),
-            modifiedAt: LocalDateTime.parse('2023-01-10T08:30:00'),
-        }
-    ];
+    const [memberData, setMemberData] = useState([]);
+    const [error, setError] = useState(null);
 
-    // Columns
+    const fetchMembers = async () => {
+        try {
+            const response = await fetch(`/api/members`, {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setMemberData(data.data);
+        } catch (error) {
+            console.error('Error - 이용자 불러오기: ', error.message);
+            setError(error.message);
+        }
+    }
+
+    useEffect(() => {
+        fetchMembers();
+    }, []);
+
+    const [showFilter, setShowFilter] = useState(false);
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    const data = Array.isArray(memberData.content)
+    ? memberData.content.map((item, index) => ({
+            number: index + 1,
+            memberId: item.memberId || '',
+            memberName: item.memberName || '',
+            memberEmail: item.memberEmail || '',
+            memberLoginId: item.memberLoginId || '',
+            zipCode: item.zipCode || '',
+            memberAddress: item.memberAddress || '',
+            memberDetailAddress: item.memberDetailAddress || '',
+            role: item.role || '',
+            createdAt: item.createdAt || '',
+            modifiedAt: item.modifiedAt || '',
+        }))
+        : [];
+
     const columns = [
+        {
+            Header: 'No',
+            accessor: 'number',
+        },
         {
             Header: 'Member ID',
             accessor: 'memberId',
@@ -106,12 +103,17 @@ const MembersEditPage = () => {
         },
     ];
 
-    const [showFilter, setShowFilter] = useState(false);
-    const [selectedRows, setSelectedRows] = useState([]);
-
     const handleSearch = (query) => {
         console.log(`검색어: ${query}`);
     };
+
+    if (error) {
+        return <div>에러가 발생했습니다: {error}</div>;
+    }
+
+    if (!memberData) {
+        return <div>로딩 중</div>;
+    }
 
     const toggleFilter= () => {
         setShowFilter((prev) => !prev);
