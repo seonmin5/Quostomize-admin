@@ -48,7 +48,7 @@ const PaymentRecordsSearch = () => {
         <div>
             <div className="p-6">
                 <div className="flex space-x-10 items-center justify-end">
-                    <SearchBar onSearch={handleSearch} placeholder="이용 금액을 입력해주세요" >
+                    <SearchBar onSearch={handleSearch} placeholder="이용 금액을 입력해주세요" onClick={handleSearch}>
                         <select
                             id="AmountStandard"
                             value={value}

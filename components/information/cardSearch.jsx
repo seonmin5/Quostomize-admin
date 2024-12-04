@@ -45,7 +45,7 @@ const CardSearchPage = () => {
         <div>
             <div className="p-6">
                 <div className="flex space-x-10 items-center justify-end">
-                    <SearchBar onSearch={handleSearch} placeholder="카드번호를 입력해주세요" />
+                    <SearchBar onSearch={handleSearch} placeholder="카드번호를 입력해주세요" onClick={handleSearch} />
                     <FilterButton onClick={toggleFilter} />
                 </div>
                 {showFilter && (
