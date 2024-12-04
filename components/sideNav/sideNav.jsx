@@ -1,9 +1,23 @@
 import NavMenuItem from "./navMenuItem";
 import { auth } from "../../auth"
+import { redirect } from "next/navigation";
 
 const SideNav = async () => {
   const session = await auth();
-  console.log(session);
+  if (!session) {
+    await fetch("api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        cache:"no-store",
+        credentials: "include"
+      });
+      
+    await signOut({ redirect: false });
+    redirect("/");
+  }
+
   return (
       <div className="w-60 min-h-screen bg-[#2C2C2C]">
           <div className="p-8 border-b border-[#000000] text-white">
