@@ -3,12 +3,12 @@ import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditions";
 import { cardSearchColumn } from "../../components/column/cardSearchColumn"
-import { cardInfo, cardInfoByFilter, cardInfoByKeyword } from "../../components/apiMethodList/get"
+import { cardInfo, cardInfoByFilter, cardInfoByKeyword } from "../apiMethodList/cardSearch/get"
 import { useEffect, useState } from "react";
 
 
 // test
-import DataTable from "../../components/table/dataTable";
+import DataTable from "../table/cardDataTable";
 
 const CardSearchPage = () => {
     const [cardInfos, setCardInfo] = useState([])
@@ -22,8 +22,7 @@ const CardSearchPage = () => {
     }, [])
 
     useEffect(() => {
-        console.log(filterDatas)
-        filterDatas.page >= 0 ? cardInfoByFilter(setCardInfo, param, filterDatas) : console.log("처음 시작합니다.")
+        filterDatas.page >= 0 ? cardInfoByFilter(setCardInfo, param, filterDatas) : null
 
     }, [filterDatas])
 
