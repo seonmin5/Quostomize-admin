@@ -98,18 +98,7 @@ const LoginPage = () => {
             </div>
           </div>
       </div>
-
-      {isLoading && <LoadingModal message={"로그인 중입니다"} />}
-      <AlertModal
-        isOpen={showAlertModal}
-        onClose={() => {
-            setSuccess(false)
-            setShowAlertModal(false)
-          }
-        }
-        title={"로그인"}
-        isSuccess={isSuccess}
-      />
+      <LoadingModal message={"로그인 중입니다"} isOpen={isLoading} />
     </div>
   );
 };

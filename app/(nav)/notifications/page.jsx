@@ -159,7 +159,7 @@ const Notifications = () => {
         <QuillWrapper onChange={updateContents} theme="snow" modules={modules} style={importantStyle} defaultValue={"내용을 입력해주세요"}/>
       </div>
       <ConfirmModal title={"알림 보내기"} description={"알림을 보내시겠습니까?"} isOpen={confirmModalOpen} setIsOpen={setConfirmModalOpen} onClose={onConfirm}/>
-      <AlertModal title={alertModalTitle} description={alertModalDescription} isOpen={alertModalOpen} setIsOpen={setAlertModalOpen} isSuccess={false}/>
+      <AlertModal title={alertModalTitle} description={alertModalDescription} isOpen={alertModalOpen} setIsOpen={setAlertModalOpen} isSuccess={alertModalSuccess}/>
       <LoadingModal message={"메일 발신 중입니다"} isOpen={laodingModalOpen}/>
     </div>
   ); 
