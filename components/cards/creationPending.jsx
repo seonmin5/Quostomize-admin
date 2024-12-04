@@ -2,14 +2,11 @@
 import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
 import PendingConditions from "../../components/button/pendingConditions";import {useState, useEffect} from "react";
-
-// test
 import CheckBoxTable from "../../components/table/checkBoxTable"
-import {LocalDate, LocalDateTime} from '@js-joda/core';
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 
 const CreationPendingPage = () => {
-    const [cardData, setCardData] = useState(null);
+    const [cardData, setCardData] = useState([]);
     const [error, setError] = useState(null);
 
     const fetchCardData = async () => {
@@ -39,92 +36,71 @@ const CreationPendingPage = () => {
         fetchCardData();
     }, []);
 
-    // Dummy Data
-    const data = [
-        {
-            cardSequenceId: 12345678,
-            cardNumber: '1234-5678-9012-3456',
-            cardBrand: 1,
-            isAppCard: true,
-            isForeignBlocked: false,
-            isPostpaidTransport: true,
-            expirationDate: LocalDate.parse('2025-12-31'),
-            optionalTerms: 12,
-            paymentReceiptMethods: 2,
-            cardStatus: 'CREATION_PENDING',
-            createdAt: LocalDateTime.parse('2024-01-01T12:00:00'),
-            modifiedAt: LocalDateTime.parse('2024-01-02T12:00:00'),
-        },
-        {
-            cardSequenceId: 87654321,
-            cardNumber: '9876-5432-1098-7654',
-            cardBrand: 2,
-            isAppCard: false,
-            isForeignBlocked: true,
-            isPostpaidTransport: false,
-            expirationDate: LocalDate.parse('2026-06-30'),
-            optionalTerms: 6,
-            paymentReceiptMethods: 1,
-            cardStatus: 'CREATION_PENDING',
-            createdAt: LocalDateTime.parse('2023-12-15T10:30:00'),
-            modifiedAt: LocalDateTime.parse('2023-12-16T10:30:00'),
-        }
-    ];
-
-    // Columns
-    const columns = [
-        {
-            Header: 'Card Sequence ID',
-            accessor: 'cardSequenceId',
-        },
-        {
-            Header: 'Card Number',
-            accessor: 'cardNumber',
-        },
-        {
-            Header: 'Card Brand',
-            accessor: 'cardBrand',
-        },
-        {
-            Header: 'Is App Card',
-            accessor: 'isAppCard',
-        },
-        {
-            Header: 'Is Foreign Blocked',
-            accessor: 'isForeignBlocked',
-        },
-        {
-            Header: 'Is Postpaid Transport',
-            accessor: 'isPostpaidTransport',
-        },
-        {
-            Header: 'Expiration Date',
-            accessor: 'expirationDate',
-        },
-        {
-            Header: 'Optional Terms',
-            accessor: 'optionalTerms',
-        },
-        {
-            Header: 'Payment Receipt Methods',
-            accessor: 'paymentReceiptMethods',
-        },
-        {
-            Header: 'Card Status',
-            accessor: 'cardStatus',
-        },
-        {
-            Header: 'Created At',
-            accessor: 'createdAt',
-        },
-        {
-            Header: 'Modified At',
-            accessor: 'modifiedAt',
-        },
-    ];
-
     const [showFilter, setShowFilter] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
+
+    const data = Array.isArray(cardData.content)
+        ? cardData.content.map((item, index) => ({
+            number: index + 1,  // 넘버링 (1부터 시작)
+            applicantEmail: item.applicantEmail || '',
+            applicantName: item.applicantName || '',
+            englishName: item.englishName || '',
+            homeAddress: item.homeAddress || '',
+            homeDetailAddress: item.homeDetailAddress || '',
+            phoneNumber: item.phoneNumber || '',
+            residenceNumber: item.residenceNumber || '',
+            shippingAddress: item.shippingAddress || '',
+            shippingDetailAddress: item.shippingDetailAddress || '',
+            zipCode: item.zipCode || '',
+        }))
+        : [];
+
+    const columns = [
+        {
+            Header: 'No',  // 컬럼 제목을 "No"로 변경
+            accessor: 'number',  // 넘버링을 표시할 컬럼으로 'number'를 사용
+        },
+        {
+            Header: 'Applicant Email',
+            accessor: 'applicantEmail',
+        },
+        {
+            Header: 'Applicant Name',
+            accessor: 'applicantName',
+        },
+        {
+            Header: 'English Name',
+            accessor: 'englishName',
+        },
+        {
+            Header: 'Home Address',
+            accessor: 'homeAddress',
+        },
+        {
+            Header: 'Home Detail Address',
+            accessor: 'homeDetailAddress',
+        },
+        {
+            Header: 'Phone Number',
+            accessor: 'phoneNumber',
+        },
+        {
+            Header: 'Residence Number',
+            accessor: 'residenceNumber',
+        },
+        {
+            Header: 'Shipping Address',
+            accessor: 'shippingAddress',
+        },
+        {
+            Header: 'Shipping Detail Address',
+            accessor: 'shippingDetailAddress',
+        },
+        {
+            Header: 'Zip Code',
+            accessor: 'zipCode',
+        },
+    ];
 
     const handleSearch = (query) => {
         console.log(`검색어: ${query}`);
