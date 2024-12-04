@@ -1,14 +1,12 @@
 'use client'
 import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
-import PendingConditions from "../../components/button/pendingConditions";
-import {useState} from "react";
+import PendingConditions from "../../components/button/pendingConditions";import {useState, useEffect} from "react";
 
 // test
 import CheckBoxTable from "../../components/table/checkBoxTable"
 import {LocalDate, LocalDateTime} from '@js-joda/core';
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
-
 
 const CreationPendingPage = () => {
     const [cardData, setCardData] = useState(null);
@@ -26,7 +24,8 @@ const CreationPendingPage = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
             setCardData(data.data);
