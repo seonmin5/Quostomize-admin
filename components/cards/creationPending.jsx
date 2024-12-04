@@ -11,6 +11,35 @@ import SubmitButtonV2 from "../../components/button/submitButtonV2";
 
 
 const CreationPendingPage = () => {
+    const [cardData, setCardData] = useState(null);
+    const [error, setError] = useState(null);
+
+    const fetchCardData = async () => {
+        try {
+            const response = await fetch('api/cards/creationPending', {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setCardData(data.data);
+        } catch (error) {
+            console.error('Error - 카드 불러오기: ', error.message);
+            setError(error.message);
+        }
+    }
+
+    useEffect(() => {
+        fetchCardData();
+    }, []);
+
     // Dummy Data
     const data = [
         {
@@ -101,6 +130,14 @@ const CreationPendingPage = () => {
     const handleSearch = (query) => {
         console.log(`검색어: ${query}`);
     };
+
+    if (error) {
+        return <div>에러가 발생했습니다: {error}</div>;
+    }
+
+    if (!cardData) {
+        return <div>로딩 중</div>;
+    }
 
     const toggleFilter= () => {
         setShowFilter((prev) => !prev);
