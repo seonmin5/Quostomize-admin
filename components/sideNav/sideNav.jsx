@@ -3,7 +3,7 @@ import { auth } from "../../auth"
 
 const SideNav = async () => {
   const session = await auth();
-
+  console.log(session);
   return (
       <div className="w-60 min-h-screen bg-[#2C2C2C]">
           <div className="p-8 border-b border-[#000000] text-white">

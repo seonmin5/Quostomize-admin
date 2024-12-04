@@ -4,7 +4,11 @@ import './editor.css';
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import PageHeader from "../../../components/header/pageHeader"
+
+import PageHeader from "../../../components/header/pageHeader";
+import ConfirmModal from "../../../components/modal/confirmModal";
+import AlertModal from "../../../components/modal/alertModal";
+import LoadingModal from '@/components/modal/loadingModal';
 
 
 const QuillWrapper = dynamic(() => import('react-quill-new'), {
@@ -26,10 +30,15 @@ const Notifications = () => {
   const [title, setTitle] = useState("");
   const [htmlContents, setHtmlContents] = useState("");
   const [optinalTerms, setOptinalTerms] = useState(-1);
-  const [isSuccess, setSuccess] = useState(true);
 
-  const [modalOpen, setModalOpen] = useState(false); 
-  const [modalMessage, setModalMessage ] = useState(""); 
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalTitle, setAlertModalTitle] = useState("");
+  const [alertModalDescription, setAlertModalDescription] = useState("");
+  const [alertModalSuccess, setAlertModalSucccess] = useState("");
+
+  const [laodingModalOpen, setLoadingModalOpen] = useState(false); 
+
 
   const updateTitle = (event) => {
     const newTitle = event.target.value;
@@ -43,18 +52,39 @@ const Notifications = () => {
   }
 
   const makeHtmlFile = () => {
-    const blob = new Blob(htmlContents, {type: "text/html"});
+    const blob = new Blob([htmlContents], {type: "text/html"});
     return blob;
   }
 
-  const openModal = (modalMessage) => {
-    setModalMessage(modalMessage);
-    setTimeout(() => {
-      setModalOpen(true);
-    },0)
+  const onConfirm = () => {
+    sendMail();
+    setConfirmModalOpen(false);
   }
 
+  const openConfirm = () => {
+    console.log(title);
+    console.log(htmlContents);
+    console.log(title.trim() === "");
+    console.log(htmlContents.trim() === "");
+
+    if ((title.trim() === "" || htmlContents.trim() === "") === true) {
+      setAlertModalTitle("알림 확인");
+      setAlertModalDescription("제목 혹은 내용이 \n올바르지 않습니다")
+      setAlertModalSucccess(false);
+      setTimeout(() => {
+        setAlertModalOpen(true);
+      },0)
+      setTimeout(() => {
+        setAlertModalOpen(false);
+      },2000)
+      return;
+    }
+    setConfirmModalOpen(true);
+  }
+
+
   const sendMail = async () => {
+    setLoadingModalOpen(true);
     const htmlFile = makeHtmlFile();
     const response = await fetch("/api/mail", {
       method: "POST",
@@ -73,13 +103,26 @@ const Notifications = () => {
     if (response.status === 400 || response.status === 200) {
       const result = await response.json();
       if (response.status === 400) {
-        setSuccess(false);
+        setAlertModalTitle("알림 확인");
+        setAlertModalDescription("제목 혹은 내용이 \n올바르지 않습니다")
+        setAlertModalSucccess(false);
+        setTimeout(() => {
+          setAlertModalOpen(true);
+        },0)
+        setTimeout(() => {
+          setAlertModalOpen(false);
+        },2000)
       } else {
-        setSuccess(true);
+        setAlertModalTitle("알림 전송 성공");
+        setAlertModalDescription("알림을 성공적으로 \n보냈습니다")
+        setAlertModalSucccess(true);
+        setTimeout(() => {
+          setAlertModalOpen(true);
+        },0)
+        setTimeout(() => {
+          setAlertModalOpen(false);
+        },2000)
       }
-      setTimeout(() => {
-        openModal(result.message);
-      }, 0)
     }
 
     if (response.status >= 401 && response.status <= 403) {
@@ -98,7 +141,7 @@ const Notifications = () => {
       <div className=' mt-6 px-10 flex justify-end'>
         <div 
           className='cursor-pointer bg-primary font-semibold text-white w-32 h-10 text-center leading-10 align-middle rounded-lg'
-          onClick={() => sendMail()}
+          onClick={() => openConfirm()}
         >
           알림 보내기
         </div>
@@ -113,8 +156,11 @@ const Notifications = () => {
             onChange={(e) => updateTitle(e)}
           />
         </div>
-        <QuillWrapper onChange={updateContents} theme="snow" modules={modules} style={importantStyle} placeholder="내용을 입력해주세요"/>
+        <QuillWrapper onChange={updateContents} theme="snow" modules={modules} style={importantStyle} defaultValue={"내용을 입력해주세요"}/>
       </div>
+      <ConfirmModal title={"알림 보내기"} description={"알림을 보내시겠습니까?"} isOpen={confirmModalOpen} setIsOpen={setConfirmModalOpen} onClose={onConfirm}/>
+      <AlertModal title={alertModalTitle} description={alertModalDescription} isOpen={alertModalOpen} setIsOpen={setAlertModalOpen} isSuccess={false}/>
+      <LoadingModal message={"메일 발신 중입니다"} isOpen={laodingModalOpen}/>
     </div>
   ); 
 }
