@@ -2,7 +2,7 @@
 export async function cardInfo(setCardInfo) {
 
     try {
-        const response = await fetch(`/api/manager/cardInfo`, {
+        const response = await fetch(`/api/manager/cardSearch/cardInfo`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -25,7 +25,7 @@ export async function cardInfoByFilter(setCardInfo, param, filterDatas) {
     param.append("sortDirection", filterDatas.sortDirection)
     param.append("status", filterDatas.status)
     try {
-        const response = await fetch(`/api/manager/cardInfoByFilter?${param}`, {
+        const response = await fetch(`/api/manager/cardSearch/cardInfoByFilter?${param}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -47,7 +47,7 @@ export async function cardInfoByKeyword(setCardInfo, param, filterDatas) {
     param.append("page", filterDatas.page)
     param.append("searchTerm", filterDatas.searchTerm)
     try {
-        const response = await fetch(`/api/manager/cardInfoByKeyword?${param}`, {
+        const response = await fetch(`/api/manager/cardSearch/cardInfoByKeyword?${param}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
