@@ -3,7 +3,7 @@ import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditions";
 import { memberSearchColumn } from "../column/memberSearchColumn";
-import { memberInfo, memberInfoByFilter, memberInfoByKeyword } from "../../components/apiMethodList/memberSearch/get"
+import { memberInfo, memberInfoByFilter, memberInfoByKeyword } from "../../service/apiMethodList/memberSearch/get"
 import { useEffect, useState } from "react";
 
 // test
