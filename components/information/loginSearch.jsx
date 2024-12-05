@@ -3,7 +3,7 @@
 import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditionByLoginLog";
 import { loginSearchColumn } from "../../components/column/loginSearchColumn"
-import { loginInfo, loginInfoByFilter } from "../apiMethodList/loginSearch/get"
+import { loginInfo, loginInfoByFilter } from "../../service/apiMethodList/loginSearch/get"
 import { useEffect, useState } from "react";
 
 
