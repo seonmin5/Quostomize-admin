@@ -13,9 +13,8 @@ export async function GET() {
                     "Authorization": `Bearer ${accessToken}`
                 },
                 credentials: 'include',
+                cache: 'no-store',
             });
-
-        console.log(backendResponse);
 
         const result = await backendResponse.json();
 
