@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SubmitButton = ({ onClick, disabled, children }) => {
+const SubmitButtonV2 = ({ onClick, disabled, children }) => {
     return (
         <button
             onClick={onClick}
@@ -12,4 +12,4 @@ const SubmitButton = ({ onClick, disabled, children }) => {
     );
 };
 
-export default SubmitButton;
+export default SubmitButtonV2;
