@@ -23,7 +23,7 @@ const PendingConditions = ({setFilterData, page, setPage, dataPage}) => {
                         <input
                             id="page"
                             type="number"
-                            value={page}
+                            value={page + 1}
                             onChange={handlePageChange}
                             className="w-full p-2 border rounded-md"
                             min="0"
