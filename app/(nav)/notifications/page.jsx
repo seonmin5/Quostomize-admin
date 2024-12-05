@@ -168,7 +168,6 @@ const Notifications = () => {
                   <option value="1">제3자 제공 동의 회원</option>
                   <option value="2">광고성 수신 동의 회원</option>
                   <option value="3">전체 동의 회원</option>
-                  <option value="6">테스트6번</option>
                 </Select>
               </div>
             :
