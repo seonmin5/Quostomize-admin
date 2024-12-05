@@ -2,13 +2,13 @@
 import 'react-quill-new/dist/quill.snow.css';
 import './editor.css';
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
-import PageHeader from "../../../components/header/pageHeader";
 import ConfirmModal from "../../../components/modal/confirmModal";
 import AlertModal from "../../../components/modal/alertModal";
-import LoadingModal from '@/components/modal/loadingModal';
+import LoadingModal from '../../../components/modal/loadingModal';
+import { Select } from '@headlessui/react';
 
 
 const QuillWrapper = dynamic(() => import('react-quill-new'), {
@@ -27,9 +27,11 @@ const modules = {
 }
 
 const Notifications = () => {
+  const tabs = ['전체 알림', '선택 알림'];
+
   const [title, setTitle] = useState("");
   const [htmlContents, setHtmlContents] = useState("");
-  const [optinalTerms, setOptinalTerms] = useState(-1);
+  const [optionalTerms, setOptinalTerms] = useState("-1");
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
@@ -37,8 +39,18 @@ const Notifications = () => {
   const [alertModalDescription, setAlertModalDescription] = useState("");
   const [alertModalSuccess, setAlertModalSucccess] = useState("");
 
-  const [laodingModalOpen, setLoadingModalOpen] = useState(false); 
+  const [loadingModalOpen, setLoadingModalOpen] = useState(false); 
 
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  const handleTabClick = (index) => {
+    if (index === 0) {
+      setOptinalTerms(-1);
+    } else {
+      setOptinalTerms(0);
+    }
+    setActiveIndex(index);
+  };
 
   const updateTitle = (event) => {
     const newTitle = event.target.value;
@@ -51,21 +63,12 @@ const Notifications = () => {
     setHtmlContents(newContents);
   }
 
-  const makeHtmlFile = () => {
-    const blob = new Blob([htmlContents], {type: "text/html"});
-    return blob;
-  }
-
   const onConfirm = () => {
     sendMail();
     setConfirmModalOpen(false);
   }
 
   const openConfirm = () => {
-    console.log(title);
-    console.log(htmlContents);
-    console.log(title.trim() === "");
-    console.log(htmlContents.trim() === "");
 
     if ((title.trim() === "" || htmlContents.trim() === "") === true) {
       setAlertModalTitle("알림 확인");
@@ -85,23 +88,19 @@ const Notifications = () => {
 
   const sendMail = async () => {
     setLoadingModalOpen(true);
-    const htmlFile = makeHtmlFile();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('optionalTerms', optionalTerms);
+    formData.append('htmlFile', new Blob([htmlContents], {type: "text/html"}));
     const response = await fetch("/api/mail", {
       method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
       credentials: "include",
       cache: "no-store",
-      body: JSON.stringify({
-        title: title,
-        optinalTerms: optinalTerms,
-        htmlFile: htmlFile
-      })
+      duplex: "half",
+      body: formData
     })
 
     if (response.status === 400 || response.status === 200) {
-      const result = await response.json();
       if (response.status === 400) {
         setAlertModalTitle("알림 확인");
         setAlertModalDescription("제목 혹은 내용이 \n올바르지 않습니다")
@@ -124,6 +123,7 @@ const Notifications = () => {
         },2000)
       }
     }
+    setLoadingModalOpen(false);
 
     if (response.status >= 401 && response.status <= 403) {
       redirect(response.url); 
@@ -134,35 +134,70 @@ const Notifications = () => {
     maxHeight: "500px !important",
     overflowY: "auto !important"
   }
-
+  
   return (
-    <div className="w-full max-w-full h-full">
-      <PageHeader />
-      <div className=' mt-6 px-10 flex justify-end'>
-        <div 
-          className='cursor-pointer bg-primary font-semibold text-white w-32 h-10 text-center leading-10 align-middle rounded-lg'
-          onClick={() => openConfirm()}
-        >
-          알림 보내기
-        </div>
+    <div className="pt-6 pl-8">
+      <div role={"tablist"} className="flex space-x-4 border-b">
+          {tabs.map((tab, index) => (
+              <button
+                key={index}
+                role="tab"
+                aria-selected={activeIndex === index}
+                onClick={() => handleTabClick(index)}
+                className={`py-2 px-4 text-gray-600 hover:text-[#3081F7] ${
+                    activeIndex === index ? "border-b-4 border-[#3081F7] font-semibold text-[#3081F7]" : ""
+                }`}>
+                  {tab}
+              </button>
+          ))}
       </div>
-      <div className="p-8 h-[calc(100%-5rem)]">
-        <div className="flex gap-5 bg-content-secondary1 h-10 items-center px-2 border-2 border-content-secondary3">
-          <div className="font-semibold">
-            제목
+      <div className="w-full max-w-full h-full">
+        <div className='mt-6 h-14 px-10 flex justify-between items-end'>
+          {
+            activeIndex === 1
+            ?
+              <div>
+                <div className='pl-1 text-content-accent1'>약관 동의 유형선택</div>
+                <Select 
+                  name="status"
+                  aria-label="Project status"
+                  className="border border-content-accent3 rounded-md text-xl bg-transparent px-1"
+                  onChange={(e) => setOptinalTerms(e.target.value)}
+                >
+                  <option value="0">필수 약관 동의 회원</option>
+                  <option value="1">제3자 제공 동의 회원</option>
+                  <option value="2">광고성 수신 동의 회원</option>
+                  <option value="3">전체 동의 회원</option>
+                </Select>
+              </div>
+            :
+              <div></div>
+          }
+          <div 
+            className='cursor-pointer bg-primary font-semibold text-white w-32 h-10 text-center leading-10 align-middle rounded-lg'
+            onClick={() => openConfirm()}
+          >
+            알림 보내기
           </div>
-          <input 
-            className="border-2 rounded-md grow text-xl h-8 leading-8 px-1 bg-content-secondary2" 
-            onChange={(e) => updateTitle(e)}
-          />
         </div>
-        <QuillWrapper onChange={updateContents} theme="snow" modules={modules} style={importantStyle} defaultValue={"내용을 입력해주세요"}/>
+        <div className="p-8 h-[calc(100%-5rem)]">
+          <div className="flex gap-5 bg-content-secondary1 h-10 items-center px-2 border-2 border-content-secondary3">
+            <div className="font-semibold">
+              제목
+            </div>
+            <input 
+              className="border-2 rounded-md grow text-xl h-8 leading-8 px-1 bg-content-secondary2" 
+              onChange={(e) => updateTitle(e)}
+            />
+          </div>
+          <QuillWrapper onChange={updateContents} theme="snow" modules={modules} style={importantStyle} defaultValue={"내용을 입력해주세요"}/>
+        </div>
+        <ConfirmModal title={"알림 보내기"} description={"알림을 보내시겠습니까?"} isOpen={confirmModalOpen} setIsOpen={setConfirmModalOpen} onClose={onConfirm}/>
+        <AlertModal title={alertModalTitle} description={alertModalDescription} isOpen={alertModalOpen} setIsOpen={setAlertModalOpen} isSuccess={alertModalSuccess}/>
+        <LoadingModal message={"메일 발신 중입니다"} isOpen={loadingModalOpen}/>
       </div>
-      <ConfirmModal title={"알림 보내기"} description={"알림을 보내시겠습니까?"} isOpen={confirmModalOpen} setIsOpen={setConfirmModalOpen} onClose={onConfirm}/>
-      <AlertModal title={alertModalTitle} description={alertModalDescription} isOpen={alertModalOpen} setIsOpen={setAlertModalOpen} isSuccess={alertModalSuccess}/>
-      <LoadingModal message={"메일 발신 중입니다"} isOpen={laodingModalOpen}/>
     </div>
-  ); 
+  )
 }
 
 export default Notifications;
