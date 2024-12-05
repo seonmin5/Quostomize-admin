@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 
-const DataTable = ({ columns, data }) => {
-    const [currentPage, setCurrentPage] = useState(0);
-    const itemsPerPage = 20;
+const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, setPage }) => {
 
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentData = data.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(dataPage);
 
     const formatDate = (date) => {
         if (!date) return '';
@@ -41,41 +36,51 @@ const DataTable = ({ columns, data }) => {
         <div className="w-full">
             <table className="min-w-full bg-white">
                 <thead>
-                <tr>
-                    {columns.map((column) => (
-                        <th key={column.accessor} className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                            {column.Header}
-                        </th>
-                    ))}
-                </tr>
-                </thead>
-                <tbody>
-                {currentData.map((row, rowIndex) => (
-                    <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <tr>
                         {columns.map((column) => (
-                            <td key={`${rowIndex}-${column.accessor}`} className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                {renderCellValue(row[column.accessor], column.accessor)}
-                            </td>
+                            <th key={column.accessor} className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                {column.Header}
+                            </th>
                         ))}
                     </tr>
-                ))}
+                </thead>
+                <tbody>
+                    {data?.map((row, rowIndex) => (
+                        <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                            {columns.map((column) => (
+                                <td key={`${rowIndex}-${column.accessor}`} className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    {renderCellValue(row[column.accessor], column.accessor)}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 
             <div className="flex justify-between items-center mt-4">
                 <button
-                    onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
-                    disabled={currentPage === 0}
+                    onClick={() => {
+                        setPage(prev => Math.max(0, prev - 1));
+                        setFilterData(filterDatas.page >= 0
+                            ? { page: Math.max(0, page - 1), sortDirection: filterDatas.sortDirection, memberRole: filterDatas.memberRole }
+                            : { page: Math.max(0, page - 1), sortDirection: "DESC", memberRole: "" })
+                    }}
+                    disabled={page === 0}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                 >
                     Previous
                 </button>
                 <span className="text-sm text-gray-700">
-                    Page {currentPage + 1} of {totalPages}
+                    Page {page + 1} of {totalPages}
                 </span>
                 <button
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
-                    disabled={currentPage === totalPages - 1}
+                    onClick={() => {
+                        setPage(prev => Math.min(totalPages - 1, prev + 1));
+                        setFilterData(filterDatas.page >= 0
+                            ? { page: Math.min(totalPages - 1, page + 1), sortDirection: filterDatas.sortDirection, memberRole: filterDatas.memberRole }
+                            : { page: Math.min(totalPages - 1, page + 1), sortDirection: "DESC", memberRole: "" })
+                    }}
+                    disabled={page === totalPages - 1}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                 >
                     Next
