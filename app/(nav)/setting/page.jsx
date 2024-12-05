@@ -1,8 +1,22 @@
+'use client'
+
+import Tabs from "../../../components/button/tabButton"
+import LoginSearchPage from "../../../components/information/loginSearch";
+import NotiSearchPage from "../../../components/setting/notiSearchPage"
+import ScrollUpButton from "../../../components/button/scrollUpButton";
+
 const Setting = () => {
+    const tabs = ["로그인 로그", "알림 로그"];
     return (
-        <div>
-            환경설정 페이지(로그)
-        </div>
+        <>
+            <div className="pt-6 pl-8">
+                <Tabs tabs={tabs} initialIndex={0} onChange={(index) => console.log(`Tab changed: ${index}`)}>
+                    <LoginSearchPage />
+                    <NotiSearchPage />
+                </Tabs>
+            </div>
+            <ScrollUpButton />
+        </>
     )
 }
 
