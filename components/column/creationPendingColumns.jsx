@@ -40,6 +40,10 @@ export function CreationPendingColumns() {
             Header: 'Zip Code',
             accessor: 'zipCode',
         },
+        {
+            Header: 'Card Sequence Id',
+            accessor: 'cardSequenceId',
+        }
 
     ]
 }
