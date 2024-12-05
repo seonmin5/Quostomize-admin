@@ -1,9 +1,9 @@
 'use client'
-import SearchBar from "../../components/button/searchBar";
+import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
 import PendingConditions from "../../components/button/pendingConditions";
 import {useState, useEffect} from "react";
-import CheckBoxTable from "../../components/table/checkBoxTable"
+import CheckBoxTable from "../table/checkBoxTableV2"
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 import {CreationPendingColumns} from "../../components/column/creationPendingColumns"
 import {CardInfo, CardInfoByFilter, CardInfoByKeyword} from "../../service/creationPending/get"

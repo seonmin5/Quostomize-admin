@@ -1,7 +1,7 @@
 'use client'
-import SearchBar from "../../components/button/searchBar";
+import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
-import FilterConditions from "../../components/button/filterConditions";
+import FilterConditions from "../button/filterConditionsV2";
 import { cardSearchColumn } from "../../components/column/cardSearchColumn"
 import { cardInfo, cardInfoByFilter, cardInfoByKeyword } from "../../service/apiMethodList/cardSearch/get"
 import { useEffect, useState } from "react";

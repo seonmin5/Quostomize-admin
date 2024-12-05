@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import {auth} from '../../../auth';
+import { auth } from '../../../../auth';
 
 export async function GET() {
     const session = await auth();
@@ -29,8 +29,8 @@ export async function GET() {
     } catch (error) {
         console.error('API Error:', error);
         return NextResponse.json(
-            {message: '서버 에러'},
-            {status: 500}
+            { message: '서버 에러' },
+            { status: 500 }
         );
     }
 }

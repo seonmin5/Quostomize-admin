@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 
-const CheckBoxTable = ({
+const CheckBoxTableV2 = ({
                            columns,
                            data = [],
                            dataPage,
@@ -147,4 +147,4 @@ const CheckBoxTable = ({
     );
 };
 
-export default CheckBoxTable;
+export default CheckBoxTableV2;

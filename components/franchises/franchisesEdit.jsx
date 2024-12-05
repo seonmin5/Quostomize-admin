@@ -1,6 +1,6 @@
 'use client'
 
-import CheckBoxTable from "../../components/table/checkBoxTable";
+import CheckBoxTable from "../table/checkBoxTableV2";
 import {useState} from "react";
 import ApprovalButton from "../../components/button/approvalButton";
 import MerchantModal from "@/components/modal/merchantModal";
