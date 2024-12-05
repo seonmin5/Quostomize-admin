@@ -22,7 +22,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (session) {
-      console.log(session);
       router.push('/information');
     }
   }, [session, router]);
