@@ -35,7 +35,7 @@ const MerchantModal = ( {visible, onCancel = () => {}, onSave}) => {
             });
             form.resetFields();
         }
-    }, [visible, formData]);
+    }, [visible]);
 
     if (!isClient) return null;
 
