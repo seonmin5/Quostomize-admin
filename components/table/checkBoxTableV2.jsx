@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 
 const CheckBoxTableV2 = ({
