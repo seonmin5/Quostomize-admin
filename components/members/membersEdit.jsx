@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import CheckBoxTable from "../../components/table/checkBoxTable"
 import { useSession } from "next-auth/react";
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const MembersEditPage = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [memberData, setMemberData] = useState([]);
     const [filterDatas, setFilterData] = useState([])
     const [error, setError] = useState(null);
@@ -18,12 +20,16 @@ const MembersEditPage = () => {
     const { data: session } = useSession()
 
     useEffect(() => {
-        fetchMembers(setMemberData, setError);
+        setIsLoading(true);
+        fetchMembers(setMemberData, setError)
+            .finally(() => setIsLoading(false));
     }, []);
 
     useEffect(() => {
-        filterDatas.page >= 0 ? fetchMembersByFilter(setMemberData, param, filterDatas, setError) : null
-    }, [filterDatas])
+        if (filterDatas.page >= 0) {
+            fetchMembersByFilter(setMemberData, param, filterDatas, setError);
+        }
+    }, [filterDatas]);
 
 
     const columns = [
@@ -88,10 +94,6 @@ const MembersEditPage = () => {
         return <div>에러가 발생했습니다: {error}</div>;
     }
 
-    if (!memberData) {
-        return <div>로딩 중</div>;
-    }
-
     const toggleFilter = () => {
         setShowFilter((prev) => !prev);
     }
@@ -138,6 +140,11 @@ const MembersEditPage = () => {
                     </div>
                 )}
             </div>
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
             <CheckBoxTable
                 columns={columns}
                 data={memberData.content}
@@ -149,6 +156,7 @@ const MembersEditPage = () => {
                 page={page}
                 setPage={setPage}
             />
+            )}
         </div>
     );
 };
