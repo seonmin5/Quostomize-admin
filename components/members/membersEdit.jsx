@@ -1,9 +1,9 @@
 'use client'
-import SearchBar from "../button/searchBarV2";
+import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
-import FilterConditions from "../button/filterConditionsV2";
+import FilterConditions from "../../components/button/filterConditions";
 import { useEffect, useState } from "react";
-import CheckBoxTable from "../table/checkBoxTableV2"
+import CheckBoxTable from "../../components/table/checkBoxTable"
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 import { useSession } from "next-auth/react";
 
@@ -75,10 +75,10 @@ const MembersEditPage = () => {
 
     const handleSearch = (query) => {
         const keyword =
-        {
-            page: page,
-            searchTerm: query
-        }
+            {
+                page: page,
+                searchTerm: query
+            }
 
         fetchMembersBykeyword(setMemberData, param, keyword, setError)
         console.log(`검색어: ${query}`);
@@ -110,7 +110,6 @@ const MembersEditPage = () => {
                 }
             })
         })
-        console.log(keywordList)
         keywordList.map((data) => {
             PatchMemberRole(data, setError)
         })
