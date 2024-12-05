@@ -40,8 +40,6 @@ const CancellationPendingPage = () => {
     const [showFilter, setShowFilter] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
 
-    console.log("cardData", cardData);
-
     const data = Array.isArray(cardData.content)
         ? cardData.content.map((item, index) => ({
             number: index + 1,  // 넘버링 (1부터 시작)
