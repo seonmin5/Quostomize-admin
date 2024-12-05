@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 
 const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, setPage }) => {
