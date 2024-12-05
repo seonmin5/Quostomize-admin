@@ -7,6 +7,8 @@ import CheckBoxTable from "../table/checkBoxTableV2"
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 import {CreationPendingColumns} from "../../components/column/creationPendingColumns"
 import {CardInfo, CardInfoByFilter, CardInfoByKeyword} from "../../service/creationPending/get"
+import {PatchCardStatus} from "../../service/cardstatus/patch"
+import {useSession} from "next-auth/react";
 
 const CreationPendingPage = () => {
     const [cardInfo, setCardInfo] = useState(
@@ -22,20 +24,22 @@ const CreationPendingPage = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [error, setError] = useState(null);
     const param = new URLSearchParams();
+    const {data: session} = useSession();
+
+    const getCardInfo = async () => {
+        setIsLoading(true);
+        try {
+            const response = await CardInfo();
+            setCardInfo(response);
+        } catch (err) {
+            setError("데이터를 불러오는 중 문제가 발생했습니다.");
+            console.error("Error fetching data:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const getCardInfo = async () => {
-            setIsLoading(true);
-            try {
-                const response = await CardInfo();
-                setCardInfo(response);
-            } catch (err) {
-                setError("데이터를 불러오는 중 문제가 발생했습니다.");
-                console.error("Error fetching data:", err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
         getCardInfo();
     }, []);
 
@@ -70,10 +74,29 @@ const CreationPendingPage = () => {
         setShowFilter((prev) => !prev);
     }
 
-    const handleApprove = () => {
+    const handleApprove = async () => {
         const approvedData = selectedRows.map((index) => cardInfo.content[index]);
         alert(`${approvedData.length}개의 행이 승인되었습니다.`);
-        setSelectedRows([]);
+        let keywordList = []
+        selectedRows.map((row) => {
+            cardInfo.content.map((data, index) => {
+                if (row === index) {
+                    keywordList.push({
+                        adminId: session.memberId,
+                        cardSequenceId: data.cardSequenceId,
+                        status: "ACTIVE",
+                        secondaryAuthCode: process.env.NEXT_PUBLIC_SECONDARY_CODE,
+                    })
+                }
+            })
+        })
+        keywordList.map((data) => {
+            PatchCardStatus(data, setError)
+        })
+        setTimeout( async () => {
+            await getCardInfo();
+            setSelectedRows([]);
+        }, 500);
     };
 
     if (isLoading) {
