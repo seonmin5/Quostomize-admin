@@ -3,12 +3,13 @@ import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
 import PendingConditions from "../../components/button/pendingConditions";
 import {useState, useEffect} from "react";
-import CheckBoxTable from "../table/checkBoxTableV2"
+import CheckBoxTableV2 from "../../components/table/checkBoxTableV2"
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 import {CreationPendingColumns} from "../../components/column/creationPendingColumns"
 import {CardInfo, CardInfoByFilter, CardInfoByKeyword} from "../../service/creationPending/get"
 import {PatchCardStatus} from "../../service/cardstatus/patch"
 import {useSession} from "next-auth/react";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const CreationPendingPage = () => {
     const [cardInfo, setCardInfo] = useState(
@@ -99,10 +100,6 @@ const CreationPendingPage = () => {
         }, 500);
     };
 
-    if (isLoading) {
-        return <div>로딩 중...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -132,7 +129,12 @@ const CreationPendingPage = () => {
                     </div>
                 )}
             </div>
-            <CheckBoxTable
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+            <CheckBoxTableV2
                 columns={CreationPendingColumns()}
                 data={cardInfo.content}
                 setFilterData={setFilterData}
@@ -143,6 +145,7 @@ const CreationPendingPage = () => {
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
             />
+            )}
         </div>
     );
 }
