@@ -6,6 +6,7 @@ import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditionByLoginLog";
 import DataTable from "../../components/table/loginDataTable";
 import {NotiInfo, NotiInfoByFilter} from "../../service/notiSearch/get";
+import SkeletonLoader from "@/components/spinner/skeletonLoader";
 
 const NotiSearchPage = () => {
     const [notiInfo, setNotiInfo] = useState(
@@ -56,10 +57,6 @@ const NotiSearchPage = () => {
         setShowFilter(prev => !prev);
     }
 
-    if (isLoading) {
-        return <div>로딩 중...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -83,14 +80,19 @@ const NotiSearchPage = () => {
                     </div>
                 )}
             </div>
-            {<DataTable
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+            <DataTable
                 columns={loginSearchColumn()}
                 data={notiInfo.content}
                 dataPage={notiInfo.totalPages}
                 setFilterData={setFilterData}
                 filterDatas={filterData}
                 page={page}
-                setPage={setPage}/>}
+                setPage={setPage}/>)}
         </div>
     );
 }
