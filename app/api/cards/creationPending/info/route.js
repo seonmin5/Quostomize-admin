@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import {auth} from '../../../../auth';
+import {auth} from '../../../../../auth';
 
 export async function GET() {
     const session = await auth();
     const accessToken = session.accessToken;
     try {
-        const backendResponse = await fetch(`${process.env.SERVER_URL}/v1/api/admin/cancel-pending-info`,
+        const backendResponse = await fetch(`${process.env.SERVER_URL}/v1/api/admin/creation-pending-info`,
             {
                 method: 'GET',
                 headers: {
