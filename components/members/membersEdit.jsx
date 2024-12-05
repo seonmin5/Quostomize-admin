@@ -4,8 +4,8 @@ import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditions";
 import { useEffect, useState } from "react";
 import CheckBoxTable from "../../components/table/checkBoxTable"
-import SubmitButtonV2 from "../../components/button/submitButtonV2";
 import { useSession } from "next-auth/react";
+import SubmitButtonV2 from "../../components/button/submitButtonV2";
 
 const MembersEditPage = () => {
     const [memberData, setMemberData] = useState([]);
@@ -105,7 +105,7 @@ const MembersEditPage = () => {
                         adminId: session.memberId,
                         memberId: data.memberId,
                         role: "SUSPENDED_MEMBER",
-                        secondaryAuthCode: 123456
+                        secondaryAuthCode: process.env.NEXT_PUBLIC_SECONDARY_CODE
                     })
                 }
             })
