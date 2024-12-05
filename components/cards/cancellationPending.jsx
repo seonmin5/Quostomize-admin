@@ -3,12 +3,13 @@ import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
 import PendingConditions from "../../components/button/pendingConditions";
 import {useEffect, useState} from "react";
-import CheckBoxTable from "../table/checkBoxTableV2"
+import CheckBoxTableV2 from "../../components/table/checkBoxTableV2"
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
 import {CancelPendingColumns} from "../../components/column/cancelPendingColumns";
 import {CardInfo, CardInfoByFilter, CardInfoByKeyword} from "../../service/cancelPending/get";
 import {useSession} from "next-auth/react";
 import {PatchCardStatus} from "../../service/cardstatus/patch";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const CancellationPendingPage = () => {
     const [cardInfo, setCardInfo] = useState(
@@ -99,10 +100,6 @@ const CancellationPendingPage = () => {
         }, 500);
     };
 
-    if (isLoading) {
-        return <div>로딩 중...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -132,17 +129,23 @@ const CancellationPendingPage = () => {
                     </div>
                 )}
             </div>
-            <CheckBoxTable
-                columns={CancelPendingColumns()}
-                data={cardInfo.content}
-                setFilterData={setFilterData}
-                filterData={filterData}
-                page={cardInfo.currentPage}
-                setPage={setPage}
-                dataPage={cardInfo.totalPage}
-                selectedRows={selectedRows}
-                setSelectedRows={setSelectedRows}
-            />
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+                <CheckBoxTableV2
+                    columns={CancelPendingColumns()}
+                    data={cardInfo.content}
+                    setFilterData={setFilterData}
+                    filterData={filterData}
+                    page={cardInfo.currentPage}
+                    setPage={setPage}
+                    dataPage={cardInfo.totalPage}
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                />
+            )}
         </div>
     );
 }
