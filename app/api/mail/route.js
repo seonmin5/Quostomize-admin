@@ -4,19 +4,27 @@ import { auth } from "../../../auth";
 export async function POST(request) {
   const session = await auth();
   const accessToken = session.accessToken;
+  const formData = await request.formData();
+
+  const backendFormData = new FormData();
+  backendFormData.append('title', formData.get('title'));
+  backendFormData.append('optionalTerms', formData.get('optionalTerms'));
+  backendFormData.append('htmlFile', formData.get('htmlFile'));
 
   const response = await fetch(
-    `${process.env.SERVER_URL}/v1/api/api/email/send/admin`,
+    `${process.env.SERVER_URL}/v1/api/admin/email`,
     {
         method: "POST",
         headers: {
-            "Content-type": "application/json",
             "Authorization": `Bearer ${accessToken}`
         },
         credentials: "include",
-        cache: "no-store"
+        cache: "no-store",
+        duplex: "half",
+        body: backendFormData
     }
   );
+  console.log(response);
   
   if (response.status === 400) {
     return NextResponse.json({message: "제목과 내용을 다시 확인해주세요"}, {status: 400});
