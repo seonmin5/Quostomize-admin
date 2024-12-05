@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 
-const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, onApprove }) => {
-    const [currentPage, setCurrentPage] = useState(0);
+const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, totalPage, filterDatas, setFilterData, page, setPage }) => {
     const itemsPerPage = 20;
 
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentData = data.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(totalPage);
+    const startIndex = page * itemsPerPage;
+    // const endIndex = startIndex + itemsPerPage;
+    // const currentData = data.slice(startIndex, endIndex);
 
     const formatDate = (date) => {
         if (!date) return '';
@@ -43,10 +42,10 @@ const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, onApprove
     };
 
     const toggleAllSelection = () => {
-        if (selectedRows.length === currentData.length) {
+        if (selectedRows.length === data?.length) {
             setSelectedRows([]);
         } else {
-            setSelectedRows(currentData.map((_, index) => startIndex + index));
+            setSelectedRows(data?.map((_, index) => startIndex + index));
         }
     };
 
@@ -54,73 +53,83 @@ const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, onApprove
         <div className="w-full">
             <table className="min-w-full bg-white">
                 <thead>
-                <tr>
-                    <th className="px-4 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                        <input
-                            type="checkbox"
-                            checked={selectedRows.length === currentData.length && currentData.length > 0}
-                            onChange={toggleAllSelection}
-                        />
-                    </th>
-                    {columns.map((column) => (
-                        <th
-                            key={column.accessor}
-                            className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                            {column.Header}
+                    <tr>
+                        <th className="px-4 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <input
+                                type="checkbox"
+                                checked={selectedRows.length === data?.length && data?.length > 0}
+                                onChange={toggleAllSelection}
+                            />
                         </th>
-                    ))}
-                </tr>
+                        {columns.map((column) => (
+                            <th
+                                key={column.accessor}
+                                className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                                {column.Header}
+                            </th>
+                        ))}
+                    </tr>
                 </thead>
                 <tbody>
-                {currentData.map((row, rowIndex) => {
-                    const globalIndex = startIndex + rowIndex;
-                    return (
-                        <tr
-                            key={globalIndex}
-                            className={
-                                selectedRows.includes(globalIndex)
-                                    ? 'bg-blue-100'
-                                    : rowIndex % 2 === 0
-                                        ? 'bg-white'
-                                        : 'bg-gray-50'
-                            }
-                        >
-                            <td className="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedRows.includes(globalIndex)}
-                                    onChange={() => toggleRowSelection(globalIndex)}
-                                />
-                            </td>
-                            {columns.map((column) => (
-                                <td
-                                    key={`${globalIndex}-${column.accessor}`}
-                                    className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500"
-                                >
-                                    {renderCellValue(row[column.accessor], column.accessor)}
+                    {data?.map((row, rowIndex) => {
+                        const globalIndex = startIndex + rowIndex;
+                        return (
+                            <tr
+                                key={globalIndex}
+                                className={
+                                    selectedRows.includes(globalIndex)
+                                        ? 'bg-blue-100'
+                                        : rowIndex % 2 === 0
+                                            ? 'bg-white'
+                                            : 'bg-gray-50'
+                                }
+                            >
+                                <td className="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedRows.includes(globalIndex)}
+                                        onChange={() => toggleRowSelection(globalIndex)}
+                                    />
                                 </td>
-                            ))}
-                        </tr>
-                    );
-                })}
+                                {columns.map((column) => (
+                                    <td
+                                        key={`${globalIndex}-${column.accessor}`}
+                                        className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500"
+                                    >
+                                        {renderCellValue(row[column.accessor], column.accessor)}
+                                    </td>
+                                ))}
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
 
             <div className="flex justify-between items-center mt-4">
                 <button
-                    onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
-                    disabled={currentPage === 0}
+                    onClick={() => {
+                        setPage((prev) => Math.max(0, prev - 1))
+                        filterDatas.page >= 0
+                            ? setFilterData({ page: Math.max(0, page - 1), sortDirection: filterDatas.sortDirection, memberRole: filterDatas.memberRole })
+                            : setFilterData({ page: Math.max(0, page - 1), sortDirection: "", memberRole: "" })
+                    }}
+                    disabled={page === 0}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                 >
                     Previous
                 </button>
                 <span className="text-sm text-gray-700">
-                    Page {currentPage + 1} of {totalPages}
+                    Page {page + 1} of {totalPages}
                 </span>
                 <button
-                    onClick={() => setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))}
-                    disabled={currentPage === totalPages - 1}
+                    onClick={() => {
+                        setPage((prev) => Math.min(totalPages - 1, prev + 1))
+                        filterDatas.page >= 0
+                            ? setFilterData({ page: Math.min(totalPages - 1, page + 1), sortDirection: filterDatas.sortDirection, memberRole: filterDatas.memberRole })
+                            : setFilterData({ page: Math.min(totalPages - 1, page + 1), sortDirection: "", memberRole: "" })
+                    }}
+                    disabled={page === totalPages - 1}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                 >
                     Next

@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import SubmitButton from "../../components/button/submitButton";
 
-const FilterConditions = ({currentPage}) => {
-    const [page, setPage] = useState(0);
+const FilterConditions = ({ currentPage, setFilterData, page, setPage, totalPage }) => {
     const [sortDirection, setSortDirection] = useState("DESC");
     const [status, setStatus] = useState("");
     const [memberRole, setMemberRole] = useState([]);
@@ -15,7 +14,7 @@ const FilterConditions = ({currentPage}) => {
         payments: ['page', 'sortDirection'],
     };
 
-    const handlePageChange = (e) => setPage(e.target.value);
+    const handlePageChange = (e) => setPage(e.target.value - 1);
     const handleSortDirectionChange = (e) => setSortDirection(e.target.value);
     const handleStatusChange = (e) => setStatus(e.target.value);
     const handleMemberRoleChange = (e) => {
@@ -29,6 +28,7 @@ const FilterConditions = ({currentPage}) => {
         const filterData = { page, sortDirection };
         if (currentPage === 'cards') filterData.status = status;
         if (currentPage === 'members') filterData.memberRole = memberRole;
+        setFilterData(filterData)
         console.log("필터 적용:", filterData);
     };
 
@@ -43,10 +43,11 @@ const FilterConditions = ({currentPage}) => {
                         <input
                             id="page"
                             type="number"
-                            value={page}
+                            value={page + 1}
                             onChange={handlePageChange}
                             className="w-full p-2 border rounded-md"
-                            min="0"
+                            min="1"
+                            max={totalPage}
                         />
                     </div>
                 )}
@@ -106,7 +107,7 @@ const FilterConditions = ({currentPage}) => {
 
                 {/* 필터 적용 버튼 */}
                 <div>
-                    <SubmitButton onClick={handleApplyFilter}/>
+                    <SubmitButton onClick={handleApplyFilter} />
                 </div>
             </div>
         </div>
