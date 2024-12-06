@@ -150,7 +150,7 @@ export const authConfig = {
   ],
   secret: process.env.NEXT_SECRET,
   pages: {
-    signIn: '/login', // 명시적으로 로그인 페이지 경로 지정
+    signIn: '/',
   },
 
   callbacks: {
