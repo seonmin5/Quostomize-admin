@@ -9,12 +9,12 @@ const Franchises = () => {
     const tabs = ["가맹점 관리"];
     return (
         <div className="pl-2">
-            <div className="pt-6 pl-4 pr-6 pb-2">
+            <div className="pt-8 pl-4 pr-6 pb-2">
                 <Tabs tabs={tabs} initialIndex={0} onChange={(index) => console.log(`Tab changed: ${index}`)}>
                     <FranchisesEditPage/>
                 </Tabs>
             </div>
-            <ScrollUpButton />
+            <ScrollUpButton/>
         </div>
     );
 }
