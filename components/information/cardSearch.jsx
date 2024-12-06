@@ -5,41 +5,60 @@ import FilterConditions from "../button/filterConditionsV2";
 import { cardSearchColumn } from "../../components/column/cardSearchColumn"
 import { cardInfo, cardInfoByFilter, cardInfoByKeyword } from "../../service/apiMethodList/cardSearch/get"
 import { useEffect, useState } from "react";
-
 import DataTable from "../table/cardDataTable";
-import LoadingModal from "../modal/loadingModal";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const CardSearchPage = () => {
     const [cardInfos, setCardInfo] = useState([])
     const [filterDatas, setFilterData] = useState({})
     const [showFilter, setShowFilter] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(0);
     const param = new URLSearchParams()
 
     useEffect(() => {
-        try {
-            cardInfo(setCardInfo)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }, [])
+        const fetchCardInfo = async () => {
+            setIsLoading(true);
+            try {
+                await cardInfo(setCardInfo);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchCardInfo();
+    }, []);
 
     useEffect(() => {
-        filterDatas.page >= 0 ? cardInfoByFilter(setCardInfo, param, filterDatas) : null
+        if (filterDatas.page >= 0) {
+            const fetchFilteredData = async () => {
+                setIsLoading(true);
+                try {
+                    await cardInfoByFilter(setCardInfo, param, filterDatas);
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchFilteredData();
+        }
+    }, [filterDatas]);
 
-    }, [filterDatas])
-
-    const columns = cardSearchColumn()
-
-    const handleSearch = (query) => {
+    const handleSearch = async (query) => {
+        setIsLoading(true);
         const keywordDatas = {
             page: page,
-            searchTerm: query
+            searchTerm: query,
+        };
+        try {
+            await cardInfoByKeyword(setCardInfo, param, keywordDatas);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
         }
-        cardInfoByKeyword(setCardInfo, param, keywordDatas)
     };
 
     const toggleFilter = () => {
@@ -54,13 +73,18 @@ const CardSearchPage = () => {
                     <FilterButton onClick={toggleFilter} />
                 </div>
                 {showFilter && (
-                    <div className="absolute right-6 z-10">  {/* 필터 패널의 위치 조정 */}
+                    <div className="absolute right-6 z-10">
                         <FilterConditions currentPage="cards" setFilterData={setFilterData} page={page} setPage={setPage} dataPage={cardInfos.totalPage} />
                     </div>
                 )}
             </div>
-            {isLoading && <LoadingModal message={"로딩 중입니다"} isOpen={isLoading} />}
-            {<DataTable columns={columns} data={cardInfos.content} dataPage={cardInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />}
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+                <DataTable columns={cardSearchColumn()} data={cardInfos.content} dataPage={cardInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />
+                )}
         </div>
     );
 };
