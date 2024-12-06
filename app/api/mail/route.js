@@ -16,7 +16,8 @@ export async function POST(request) {
     {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${accessToken}`,
+            "traceId": `${session.traceId}`
         },
         credentials: "include",
         cache: "no-store",
