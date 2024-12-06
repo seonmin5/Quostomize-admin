@@ -9,16 +9,24 @@ import { useEffect, useState } from "react";
 
 // test
 import DataTable from "../table/cardDataTable";
+import LoadingModal from "../modal/loadingModal";
 
 const CardSearchPage = () => {
     const [cardInfos, setCardInfo] = useState([])
     const [filterDatas, setFilterData] = useState({})
     const [showFilter, setShowFilter] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0);
     const param = new URLSearchParams()
 
     useEffect(() => {
-        cardInfo(setCardInfo)
+        try {
+            cardInfo(setCardInfo)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+        }
     }, [])
 
     useEffect(() => {
@@ -54,6 +62,7 @@ const CardSearchPage = () => {
                     </div>
                 )}
             </div>
+            {isLoading && <LoadingModal message={"로딩 중입니다"} isOpen={isLoading} />}
             {<DataTable columns={columns} data={cardInfos.content} dataPage={cardInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />}
         </div>
     );

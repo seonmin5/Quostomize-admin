@@ -8,20 +8,27 @@ import { useEffect, useState } from "react";
 
 // test
 import DataTable from "../table/paymentRecordDataTable";
+import LoadingModal from "../modal/loadingModal";
 
 const PaymentRecordsSearch = () => {
     const [paymentRecordInfos, setPaymentRecordInfo] = useState([])
     const [filterDatas, setFilterData] = useState({})
     const [showFilter, setShowFilter] = useState(false)
+    const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0)
     const [value, setValue] = useState("")
     const param = new URLSearchParams()
     // Dummy data
 
     useEffect(() => {
-        paymentRecordInfo(setPaymentRecordInfo)
+        try {
+            paymentRecordInfo(setPaymentRecordInfo)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+        }
     }, [])
-
     useEffect(() => {
         Object.keys(filterDatas).length < 3
             ? filterDatas.page >= 0 ? paymentRecordInfoByFilter(setPaymentRecordInfo, param, filterDatas) : null
@@ -68,6 +75,7 @@ const PaymentRecordsSearch = () => {
                     </div>
                 )}
             </div>
+            {isLoading && <LoadingModal message={"로딩 중입니다"} isOpen={isLoading} />}
             <DataTable columns={columns} data={paymentRecordInfos.content} dataPage={paymentRecordInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />
         </div>
     );
