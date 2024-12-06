@@ -182,7 +182,7 @@ const Notifications = () => {
           </SubmitButtonV2>
 
         </div>
-        <div className="p-8 h-[calc(100%-5rem)]">
+        <div className="pt-8 pr-8 h-[calc(100%-5rem)]">
           <div className="flex gap-5 bg-content-secondary1 h-10 items-center px-2 border-2 border-content-secondary3">
             <div className="font-semibold">
               제목
