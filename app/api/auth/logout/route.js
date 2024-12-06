@@ -18,8 +18,9 @@ export async function POST(request) {
               cache: "no-store"
           }
       );
+      return NextResponse.json("로그아웃 완료", {status: 200});
   } catch(err) {
-
+    return NextResponse.json("서버에 문제가 발생했습니다.", {status: 500});
   } finally {
     await signOut({ redirect: false });
   }
