@@ -129,12 +129,14 @@ export const authConfig = {
         const memberRole = result.memberRole;
         const memberName = result.memberName;
         const memberLoginId = credentials.memberLoginId;
+        const traceId = result.traceId;
 
         const user = {
           id: memberId,
           name: memberName,
           loginId: memberLoginId,
           role: memberRole,
+          traceId: traceId,
           accessToken: accessToken,
           refreshToken: refreshToken,
           accessExpires: new Date().valueOf() + 1800000,
@@ -160,6 +162,7 @@ export const authConfig = {
           memberName: user.name,
           memberLoginId: user.loginId,
           memberRole: user.role,
+          traceId : user.traceId,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
           accessExpires: user.accessExpires,
@@ -195,6 +198,7 @@ export const authConfig = {
         session.memberName = token.memberName;
         session.memberLoginId = token.memberLoginId;
         session.memberRole = token.memberRole;
+        session.traceId = token.traceId;
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.accessExpires = token.accessExpires;
