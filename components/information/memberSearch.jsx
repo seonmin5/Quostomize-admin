@@ -5,42 +5,61 @@ import FilterConditions from "../button/filterConditionsV2";
 import { memberSearchColumn } from "../column/memberSearchColumn";
 import { memberInfo, memberInfoByFilter, memberInfoByKeyword } from "../../service/apiMethodList/memberSearch/get"
 import { useEffect, useState } from "react";
-
-// test
 import DataTable from "../table/memberDataTable";
-import LoadingModal from "../modal/loadingModal";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const MemberSearchPage = () => {
     const [memberInfos, setMemberInfo] = useState([])
     const [filterDatas, setFilterData] = useState({})
     const [showFilter, setShowFilter] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(0);
     const param = new URLSearchParams()
 
     useEffect(() => {
-        try {
-            memberInfo(setMemberInfo)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }, [])
+        const fetchMemberInfo = async () => {
+            setIsLoading(true);
+            try {
+                await memberInfo(setMemberInfo);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchMemberInfo();
+    }, []);
+
 
     useEffect(() => {
-        filterDatas.page >= 0 ? memberInfoByFilter(setMemberInfo, param, filterDatas) : null
-    }, [filterDatas])
+        if (filterDatas.page >= 0) {
+            const fetchFilteredData = async () => {
+                setIsLoading(true);
+                try {
+                    await memberInfoByFilter(setMemberInfo, param, filterDatas);
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchFilteredData();
+        }
+    }, [filterDatas]);
 
-    // Columns
-    const columns = memberSearchColumn()
-
-    const handleSearch = (query) => {
+    const handleSearch = async (query) => {
+        setIsLoading(true);
         const keywordDatas = {
             page: page,
-            searchTerm: query
+            searchTerm: query,
+        };
+        try {
+            await memberInfoByKeyword(setMemberInfo, param, keywordDatas);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
         }
-        memberInfoByKeyword(setMemberInfo, param, keywordDatas)
     };
 
     const toggleFilter = () => {
@@ -60,8 +79,13 @@ const MemberSearchPage = () => {
                     </div>
                 )}
             </div>
-            {isLoading && <LoadingModal message={"로딩 중입니다"} isOpen={isLoading} />}
-            <DataTable columns={columns} data={memberInfos.content} dataPage={memberInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+                <DataTable columns={memberSearchColumn()} data={memberInfos.content} dataPage={memberInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />
+                )}
         </div>
     );
 };
