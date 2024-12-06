@@ -140,7 +140,7 @@ const Notifications = () => {
   }
   
   return (
-    <div className="pt-6 pl-8">
+    <div className="pt-8 pl-6">
       <div role={"tablist"} className="flex space-x-4 border-b">
           {tabs.map((tab, index) => (
               <button
