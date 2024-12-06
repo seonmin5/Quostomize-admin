@@ -1,8 +1,9 @@
 
 import { auth } from "../../auth"
 import { redirect } from "next/navigation";
-
+import { signOut } from "next-auth/react"
 import  Menus from "./menus";
+import LogoutButton from "../../components/button/logoutButton";
 
 const SideNav = async () => {
   const session = await auth();
@@ -19,6 +20,7 @@ const SideNav = async () => {
     } catch {
 
     } finally {
+      await signOut({redirect:false});
       redirect("/");
     }
   }
@@ -36,9 +38,7 @@ const SideNav = async () => {
                 className="text-gray-300 text-sm flex justify-between"
               >
                 {session.memberLoginId}
-                <div className="underline cursor-pointer text-xs">
-                  로그아웃
-                </div>
+                <LogoutButton />
               </div>
           </div>
           <Menus />
