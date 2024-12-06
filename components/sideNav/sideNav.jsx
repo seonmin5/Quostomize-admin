@@ -1,27 +1,48 @@
-import Link from "next/link";
-import NavMenuItem from "./navMenuItem";
+
+import { auth } from "../../auth"
+import { redirect } from "next/navigation";
+import { signOut } from "next-auth/react"
+import  Menus from "./menus";
+import LogoutButton from "../../components/button/logoutButton";
 
 const SideNav = async () => {
+  const session = await auth();
+  if (!session) {
+    try {
+      await fetch("api/auth/logout", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          cache:"no-store",
+          credentials: "include"
+        });
+    } catch {
+
+    } finally {
+      await signOut({redirect:false});
+      redirect("/");
+    }
+  }
+
   return (
-    <div className="w-full h-full sticky top-0 left-0 bg-gray-800 text-white">
-      <div className="px-4 pt-9 pb-4 h-48 border-white border-2">
-        <div className="mb-4">로고</div>
-        <div>현재 로그인한 사용자 이름</div>
-        <div>현재 로그인한 사용자 아이디</div>
+      <div className="w-60 min-h-[2200px] bg-[#2C2C2C]">
+          <div className="p-4 pt-8 border-b border-[#000000] text-white">
+              <div className="flex items-center mb-6">
+                  <div className="text-[20px] font-bold flex items-center">
+                      <img src="/icons/woori_ci.png" className="w-10 pr-1" /> WON 커스터마이징
+                  </div>
+              </div>
+              <div className="text-gray-300 text-sm">{session.memberName}</div>
+              <div
+                className="text-gray-300 text-sm flex justify-between"
+              >
+                {session.memberLoginId}
+                <LogoutButton />
+              </div>
+          </div>
+          <Menus />
       </div>
-      <ul className="pt-4 space-y-4">
-        <NavMenuItem menuName={"카드 정보 관리"} menuHref={"card-details"} />
-        <NavMenuItem menuName={"카드 신청 관리"} menuHref={"card-applicants"} />
-        <NavMenuItem menuName={"회원 관리"} menuHref={"members"} />
-        <NavMenuItem menuName={"가맹점 관리"} menuHref={"franchises"} />
-        <NavMenuItem menuName={"알림 보내기"} menuHref={"notifications"} />
-        <li>
-          <Link href="#" className="flex items-center space-x-3 text-xl rounded-md bg-transparent px-3 py-2 hover:bg-gray-600 hover:font-semibold " target="_blank">
-            <span>모니터링</span>
-          </Link>
-        </li>
-      </ul>
-    </div>
   );
 }
 
