@@ -4,7 +4,7 @@ const LoginForm = ({ formData, handleInputChange, isFormValid, onSubmit }) => {
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">
+        <label className="block text-sm font-medium text-gray-600 mb-2 select-none">
           아이디
         </label>
         <input
@@ -18,7 +18,7 @@ const LoginForm = ({ formData, handleInputChange, isFormValid, onSubmit }) => {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">
+        <label className="block text-sm font-medium text-gray-600 mb-2 select-none">
           비밀번호
         </label>
         <input
@@ -34,7 +34,7 @@ const LoginForm = ({ formData, handleInputChange, isFormValid, onSubmit }) => {
       <button
         type="submit"
         disabled={!isFormValid}
-        className={`w-full py-3 rounded-xl font-semibold transition-all
+        className={`w-full py-3 rounded-xl font-semibold transition-all select-none
           ${isFormValid 
             ? 'bg-blue-400 text-white hover:bg-blue-500' 
             : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}

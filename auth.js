@@ -128,12 +128,15 @@ export const authConfig = {
         const memberId = result.memberId;
         const memberRole = result.memberRole;
         const memberName = result.memberName;
-        
+        const memberLoginId = credentials.memberLoginId;
+        const traceId = result.traceId;
 
         const user = {
           id: memberId,
           name: memberName,
+          loginId: memberLoginId,
           role: memberRole,
+          traceId: traceId,
           accessToken: accessToken,
           refreshToken: refreshToken,
           accessExpires: new Date().valueOf() + 1800000,
@@ -147,7 +150,7 @@ export const authConfig = {
   ],
   secret: process.env.NEXT_SECRET,
   pages: {
-    signIn: '/login', // 명시적으로 로그인 페이지 경로 지정
+    signIn: '/',
   },
 
   callbacks: {
@@ -156,8 +159,10 @@ export const authConfig = {
       if (account && user) {
         return {
           memberId: user.id,
-          memberName: user.memberName,
+          memberName: user.name,
+          memberLoginId: user.loginId,
           memberRole: user.role,
+          traceId : user.traceId,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
           accessExpires: user.accessExpires,
@@ -191,7 +196,9 @@ export const authConfig = {
       if (token) {
         session.memberId = token.memberId;
         session.memberName = token.memberName;
+        session.memberLoginId = token.memberLoginId;
         session.memberRole = token.memberRole;
+        session.traceId = token.traceId;
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.accessExpires = token.accessExpires;
