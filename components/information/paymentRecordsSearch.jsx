@@ -5,38 +5,37 @@ import FilterConditions from "../button/filterConditionsV2";
 import { paymentRecordSearchColumn } from "../column/paymentRecordSearchColumn";
 import { paymentRecordInfo, paymentRecordInfoByFilter, paymentRecordInfoByKeyword } from "../../service/apiMethodList/paymentRecordSearch/get"
 import { useEffect, useState } from "react";
-
-// test
 import DataTable from "../table/paymentRecordDataTable";
-import LoadingModal from "../modal/loadingModal";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const PaymentRecordsSearch = () => {
     const [paymentRecordInfos, setPaymentRecordInfo] = useState([])
     const [filterDatas, setFilterData] = useState({})
     const [showFilter, setShowFilter] = useState(false)
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(0)
     const [value, setValue] = useState("")
     const param = new URLSearchParams()
-    // Dummy data
 
     useEffect(() => {
-        try {
-            paymentRecordInfo(setPaymentRecordInfo)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }, [])
+        const fetchPaymentInfo = async () => {
+            setIsLoading(true);
+            try {
+                await paymentRecordInfo(setPaymentRecordInfo);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPaymentInfo();
+    }, []);
+
     useEffect(() => {
         Object.keys(filterDatas).length < 3
             ? filterDatas.page >= 0 ? paymentRecordInfoByFilter(setPaymentRecordInfo, param, filterDatas) : null
             : filterDatas.page >= 0 ? paymentRecordInfoByKeyword(setPaymentRecordInfo, param, filterDatas) : null
     }, [filterDatas])
-
-    // Columns
-    const columns = paymentRecordSearchColumn()
 
     const handleSearch = (query) => {
         const keywordDatas = {
@@ -70,13 +69,18 @@ const PaymentRecordsSearch = () => {
                     <FilterButton onClick={toggleFilter} />
                 </div>
                 {showFilter && (
-                    <div className="absolute right-6 z-10">  {/* 필터 패널의 위치 조정 */}
+                    <div className="absolute right-6 z-10">
                         <FilterConditions currentPage="payments" setFilterData={setFilterData} page={page} setPage={setPage} dataPage={paymentRecordInfos.totalPage} />
                     </div>
                 )}
             </div>
-            {isLoading && <LoadingModal message={"로딩 중입니다"} isOpen={isLoading} />}
-            <DataTable columns={columns} data={paymentRecordInfos.content} dataPage={paymentRecordInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+                <DataTable columns={paymentRecordSearchColumn()} data={paymentRecordInfos.content} dataPage={paymentRecordInfos.totalPage} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />
+                )}
         </div>
     );
 };
