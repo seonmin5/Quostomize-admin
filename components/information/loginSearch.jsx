@@ -7,16 +7,24 @@ import { loginInfo, loginInfoByFilter } from "../../service/apiMethodList/loginS
 import { useEffect, useState } from "react";
 
 import DataTable from "../table/loginDataTable";
+import LoadingModal from "../modal/loadingModal";
 
 const LoginSearchPage = () => {
     const [loginInfos, setLoginInfos] = useState([])
     const [filterDatas, setFilterData] = useState({})
     const [showFilter, setShowFilter] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0);
     const param = new URLSearchParams()
 
     useEffect(() => {
-        loginInfo(setLoginInfos)
+        try {
+            loginInfo(setLoginInfos)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+        }
     }, [])
 
     useEffect(() => {
@@ -41,6 +49,7 @@ const LoginSearchPage = () => {
                     </div>
                 )}
             </div>
+            {isLoading && <LoadingModal message={"로딩 중입니다"} isOpen={isLoading} />}
             {<DataTable columns={columns} data={loginInfos.content} dataPage={loginInfos.totalPages} setFilterData={setFilterData} filterDatas={filterDatas} page={page} setPage={setPage} />}
         </div>
     );
