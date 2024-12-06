@@ -9,16 +9,20 @@ import ConfirmModal from "../../../components/modal/confirmModal";
 import AlertModal from "../../../components/modal/alertModal";
 import LoadingModal from '../../../components/modal/loadingModal';
 import { Select } from '@headlessui/react';
-
+import SubmitButtonV2 from "../../../components/button/submitButtonV2";
+import SkeletonLoader from "../../../components/spinner/skeletonLoader";
 
 const QuillWrapper = dynamic(() => import('react-quill-new'), {
   ssr: false,
-  loading: () => <p>Loading ...</p>,
+  loading: () =>
+      <div className="p-6">
+        <SkeletonLoader/>
+      </div>,
 })
 
 const modules = {
   toolbar: [
-    [{ 'header': [1, 2, false] }],
+    [{'header': [1, 2, false]}],
     ['bold', 'italic', 'underline','strike', 'blockquote'],
     [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
     ['link', 'image'],
@@ -161,7 +165,7 @@ const Notifications = () => {
                 <Select 
                   name="status"
                   aria-label="Project status"
-                  className="border border-content-accent3 rounded-md text-xl bg-transparent px-1"
+                  className="border border-content-accent3 rounded-md font-bold bg-transparent px-1"
                   onChange={(e) => setOptinalTerms(e.target.value)}
                 >
                   <option value="0">필수 약관 동의 회원</option>
@@ -173,12 +177,10 @@ const Notifications = () => {
             :
               <div></div>
           }
-          <div 
-            className='cursor-pointer bg-primary font-semibold text-white w-32 h-10 text-center leading-10 align-middle rounded-lg'
-            onClick={() => openConfirm()}
-          >
+          <SubmitButtonV2 onClick={() => openConfirm()}>
             알림 보내기
-          </div>
+          </SubmitButtonV2>
+
         </div>
         <div className="p-8 h-[calc(100%-5rem)]">
           <div className="flex gap-5 bg-content-secondary1 h-10 items-center px-2 border-2 border-content-secondary3">

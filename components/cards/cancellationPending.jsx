@@ -1,114 +1,108 @@
 'use client'
-import SearchBar from "../../components/button/searchBar";
+import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
 import PendingConditions from "../../components/button/pendingConditions";
-import {useState} from "react";
-
-// test
-import CheckBoxTable from "../../components/table/checkBoxTable"
-import {LocalDate, LocalDateTime} from '@js-joda/core';
+import {useEffect, useState} from "react";
+import CheckBoxTableV2 from "../../components/table/checkBoxTableV2"
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
+import {CancelPendingColumns} from "../../components/column/cancelPendingColumns";
+import {CardInfo, CardInfoByFilter, CardInfoByKeyword} from "../../service/cancelPending/get";
+import {useSession} from "next-auth/react";
+import {PatchCardStatus} from "../../service/cardstatus/patch";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const CancellationPendingPage = () => {
-    // Dummy Data
-    const data = [
+    const [cardInfo, setCardInfo] = useState(
         {
-            cardSequenceId: 12345678,
-            cardNumber: '1234-5678-9012-3456',
-            cardBrand: 1,
-            isAppCard: true,
-            isForeignBlocked: false,
-            isPostpaidTransport: true,
-            expirationDate: LocalDate.parse('2025-12-31'),
-            optionalTerms: 12,
-            paymentReceiptMethods: 2,
-            cardStatus: 'CANCELLATION_PENDING',
-            createdAt: LocalDateTime.parse('2024-01-01T12:00:00'),
-            modifiedAt: LocalDateTime.parse('2024-01-02T12:00:00'),
-        },
-        {
-            cardSequenceId: 87654321,
-            cardNumber: '9876-5432-1098-7654',
-            cardBrand: 2,
-            isAppCard: false,
-            isForeignBlocked: true,
-            isPostpaidTransport: false,
-            expirationDate: LocalDate.parse('2026-06-30'),
-            optionalTerms: 6,
-            paymentReceiptMethods: 1,
-            cardStatus: 'CANCELLATION_PENDING',
-            createdAt: LocalDateTime.parse('2023-12-15T10:30:00'),
-            modifiedAt: LocalDateTime.parse('2023-12-16T10:30:00'),
-        }
-    ];
-
-    // Columns
-    const columns = [
-        {
-            Header: 'Card Sequence ID',
-            accessor: 'cardSequenceId',
-        },
-        {
-            Header: 'Card Number',
-            accessor: 'cardNumber',
-        },
-        {
-            Header: 'Card Brand',
-            accessor: 'cardBrand',
-        },
-        {
-            Header: 'Is App Card',
-            accessor: 'isAppCard',
-        },
-        {
-            Header: 'Is Foreign Blocked',
-            accessor: 'isForeignBlocked',
-        },
-        {
-            Header: 'Is Postpaid Transport',
-            accessor: 'isPostpaidTransport',
-        },
-        {
-            Header: 'Expiration Date',
-            accessor: 'expirationDate',
-        },
-        {
-            Header: 'Optional Terms',
-            accessor: 'optionalTerms',
-        },
-        {
-            Header: 'Payment Receipt Methods',
-            accessor: 'paymentReceiptMethods',
-        },
-        {
-            Header: 'Card Status',
-            accessor: 'cardStatus',
-        },
-        {
-            Header: 'Created At',
-            accessor: 'createdAt',
-        },
-        {
-            Header: 'Modified At',
-            accessor: 'modifiedAt',
-        },
-    ];
-
+            content: [],
+            currentPage: 0,
+            totalPage: 1
+        });
+    const [isLoading, setIsLoading] = useState(true);
+    const [filterData, setFilterData] = useState({ page: 0 });
     const [showFilter, setShowFilter] = useState(false);
+    const [page, setPage] = useState(0);
     const [selectedRows, setSelectedRows] = useState([]);
+    const [error, setError] = useState(null);
+    const param = new URLSearchParams();
+    const {data: session} = useSession();
 
-    const handleSearch = (query) => {
-        console.log(`검색어: ${query}`);
+    const getCardInfo = async () => {
+        setIsLoading(true);
+        try {
+            const response = await CardInfo();
+            setCardInfo(response);
+        } catch (err) {
+            setError("데이터를 불러오는 중 문제가 발생했습니다.");
+            console.error("Error fetching data:", err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const toggleFilter= () => {
+    useEffect(() => {
+        getCardInfo();
+    }, []);
+
+    useEffect(() => {
+        if (filterData.page >= 0) {
+            const fetchFilteredData = async () => {
+                try {
+                    const response = await CardInfoByFilter(setCardInfo, param, filterData);
+                    setCardInfo(response);
+                } catch (err) {
+                    console.error("Error fetching filtered data:", err);
+                }
+            };
+            fetchFilteredData();
+        }
+    }, [filterData]);
+
+    const handleSearch = async (query) => {
+        const keywordData = {
+            page: page,
+            searchTerm: query
+        }
+        try {
+            const response = await CardInfoByKeyword(setCardInfo, param, keywordData);
+            setCardInfo(response);
+        } catch (err) {
+            console.error("Error searching data:", err);
+        }
+    };
+
+    const toggleFilter = () => {
         setShowFilter((prev) => !prev);
     }
-    const handleApprove = () => {
-        const approvedData = selectedRows.map((index) => data[index]);
+
+    const handleApprove = async () => {
+        const approvedData = selectedRows.map((index) => cardInfo.content[index]);
         alert(`${approvedData.length}개의 행이 승인되었습니다.`);
-        setSelectedRows([]);
+        let keywordList = []
+        selectedRows.map((row) => {
+            cardInfo.content.map((data, index) => {
+                if (row === index) {
+                    keywordList.push({
+                        adminId: session.memberId,
+                        cardSequenceId: data.cardSequenceId,
+                        status: "CANCELLED",
+                        secondaryAuthCode: process.env.NEXT_PUBLIC_SECONDARY_CODE,
+                    })
+                }
+            })
+        })
+        keywordList.map((data) => {
+            PatchCardStatus(data, setError)
+        })
+        setTimeout(async() => {
+            await getCardInfo();
+            setSelectedRows([]);
+        }, 500);
     };
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div>
@@ -120,24 +114,40 @@ const CancellationPendingPage = () => {
                         </SubmitButtonV2>
                     </div>
                     <div className="items-center flex space-x-10">
-                        <SearchBar onSearch={handleSearch}/>
+                        <SearchBar onSearch={handleSearch} placeholder="Member Id를 입력해 주세요" onClick={handleSearch}/>
                         <FilterButton onClick={toggleFilter}/>
                     </div>
                 </div>
                 {showFilter && (
                     <div className="absolute right-6 z-10">
-                        <PendingConditions />
+                        <PendingConditions
+                            setFilterData={setFilterData}
+                            page={page}
+                            setPage={setPage}
+                            dataPage={cardInfo.totalPage}
+                        />
                     </div>
                 )}
             </div>
-            <CheckBoxTable
-                columns={columns}
-                data={data}
-                selectedRows={selectedRows}
-                setSelectedRows={setSelectedRows}
-            />
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
+                <CheckBoxTableV2
+                    columns={CancelPendingColumns()}
+                    data={cardInfo.content}
+                    setFilterData={setFilterData}
+                    filterData={filterData}
+                    page={cardInfo.currentPage}
+                    setPage={setPage}
+                    dataPage={cardInfo.totalPage}
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                />
+            )}
         </div>
     );
-
 }
+
 export default CancellationPendingPage;

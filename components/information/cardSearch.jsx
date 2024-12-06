@@ -1,13 +1,11 @@
 'use client'
-import SearchBar from "../../components/button/searchBar";
+import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
-import FilterConditions from "../../components/button/filterConditions";
+import FilterConditions from "../button/filterConditionsV2";
 import { cardSearchColumn } from "../../components/column/cardSearchColumn"
-import { cardInfo, cardInfoByFilter, cardInfoByKeyword } from "../apiMethodList/cardSearch/get"
+import { cardInfo, cardInfoByFilter, cardInfoByKeyword } from "../../service/apiMethodList/cardSearch/get"
 import { useEffect, useState } from "react";
 
-
-// test
 import DataTable from "../table/cardDataTable";
 
 const CardSearchPage = () => {
@@ -26,7 +24,6 @@ const CardSearchPage = () => {
 
     }, [filterDatas])
 
-    // Columns 정의
     const columns = cardSearchColumn()
 
     const handleSearch = (query) => {

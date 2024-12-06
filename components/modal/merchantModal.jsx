@@ -67,26 +67,6 @@ const MerchantModal = ( {visible, onCancel = () => {}, onSave}) => {
         },
     ];
 
-    // const handleSubmit = () => {
-    //     setLoading(true);  // 상신 버튼을 클릭하면 로딩 상태로 변경
-    //     form.validateFields().then(values => {
-    //         if (onSave) onSave(values);
-    //         setFormData(values);  // 양식 데이터를 상태로 저장
-    //
-    //         // 시뮬레이션: 상신 완료 후 스피너를 종료하고 메시지 표시
-    //         setTimeout(() => {
-    //             setLoading(false);  // 로딩 종료
-    //             setSuccessMessage('결재 상신이 완료되었습니다.');  // 완료 메시지 설정
-    //
-    //             // 3초 후 Modal 닫기
-    //             setTimeout(() => {
-    //                 onCancel();  // Modal 닫기
-    //                 setSuccessMessage('');  // 완료 메시지 초기화
-    //             }, 3000); // 3초 후 모달 닫기
-    //         }, 1500); // 1.5초간 스피너를 돌린 뒤 처리 완료
-    //     });
-    // };
-
     return (
         <Modal
             open={visible}

@@ -1,9 +1,9 @@
 'use client'
-import SearchBar from "../../components/button/searchBar";
+import SearchBar from "../button/searchBarV2";
 import FilterButton from "../../components/button/filterButton";
-import FilterConditions from "../../components/button/filterConditions";
+import FilterConditions from "../button/filterConditionsV2";
 import { paymentRecordSearchColumn } from "../column/paymentRecordSearchColumn";
-import { paymentRecordInfo, paymentRecordInfoByFilter, paymentRecordInfoByKeyword } from "../../components/apiMethodList/paymentRecordSearch/get"
+import { paymentRecordInfo, paymentRecordInfoByFilter, paymentRecordInfoByKeyword } from "../../service/apiMethodList/paymentRecordSearch/get"
 import { useEffect, useState } from "react";
 
 // test

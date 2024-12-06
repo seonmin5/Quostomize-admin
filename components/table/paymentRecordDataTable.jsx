@@ -72,7 +72,7 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
                     disabled={page === 0}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                 >
-                    Previous
+                    이전
                 </button>
                 <span className="text-sm text-gray-700">
                     Page {page + 1} of {totalPages}
@@ -91,7 +91,7 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
                     disabled={page === totalPages - 1}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                 >
-                    Next
+                    다음
                 </button>
             </div>
         </div>

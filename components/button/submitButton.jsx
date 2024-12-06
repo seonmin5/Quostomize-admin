@@ -1,4 +1,4 @@
-const Submitbutton = ({onClick}) => {
+const SubmitButton = ({onClick}) => {
     return (
         <button
             onClick={onClick}
@@ -9,4 +9,4 @@ const Submitbutton = ({onClick}) => {
     );
 };
 
-export default Submitbutton;
+export default SubmitButton;

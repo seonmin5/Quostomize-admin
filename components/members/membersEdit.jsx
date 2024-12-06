@@ -2,68 +2,41 @@
 import SearchBar from "../../components/button/searchBar";
 import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditions";
-import {useState} from "react";
-
-// test
+import { useEffect, useState } from "react";
 import CheckBoxTable from "../../components/table/checkBoxTable"
-import { LocalDateTime } from '@js-joda/core';
+import { useSession } from "next-auth/react";
 import SubmitButtonV2 from "../../components/button/submitButtonV2";
+import SkeletonLoader from "../../components/spinner/skeletonLoader";
 
 const MembersEditPage = () => {
-    // Dummy Data
-    const data = [
-        {
-            memberId: 1,
-            memberName: 'John Doe',
-            memberEmail: 'johndoe@example.com',
-            memberLoginId: 'john123',
-            zipCode: '12345',
-            memberAddress: '123 Main St',
-            memberDetailAddress: 'Apt 4B',
-            role: 'MEMBER',
-            createdAt: LocalDateTime.parse('2024-01-01T12:00:00'),
-            modifiedAt: LocalDateTime.parse('2024-01-02T12:00:00'),
-        },
-        {
-            memberId: 2,
-            memberName: 'Jane Smith',
-            memberEmail: 'janesmith@example.com',
-            memberLoginId: 'jane456',
-            zipCode: '67890',
-            memberAddress: '456 Oak Ave',
-            memberDetailAddress: 'Suite 101',
-            role: 'MEMBER',
-            createdAt: LocalDateTime.parse('2023-12-15T10:30:00'),
-            modifiedAt: LocalDateTime.parse('2023-12-16T10:30:00'),
-        },
-        {
-            memberId: 3,
-            memberName: 'Mark Lee',
-            memberEmail: 'marklee@example.com',
-            memberLoginId: 'mark789',
-            zipCode: '54321',
-            memberAddress: '789 Pine St',
-            memberDetailAddress: 'Room 202',
-            role: 'SUSPENDED_MEMBER',
-            createdAt: LocalDateTime.parse('2023-11-20T15:00:00'),
-            modifiedAt: LocalDateTime.parse('2023-11-21T15:00:00'),
-        },
-        {
-            memberId: 4,
-            memberName: 'Lucy Kim',
-            memberEmail: 'lucykim@example.com',
-            memberLoginId: 'lucy101',
-            zipCode: '11223',
-            memberAddress: '101 Maple Rd',
-            memberDetailAddress: 'Unit 5A',
-            role: 'OLD_MEMBER',
-            createdAt: LocalDateTime.parse('2022-06-30T08:00:00'),
-            modifiedAt: LocalDateTime.parse('2023-01-10T08:30:00'),
-        }
-    ];
+    const [isLoading, setIsLoading] = useState(true);
+    const [memberData, setMemberData] = useState([]);
+    const [filterDatas, setFilterData] = useState([])
+    const [error, setError] = useState(null);
+    const [showFilter, setShowFilter] = useState(false);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [page, setPage] = useState(0);
+    const param = new URLSearchParams()
+    const { data: session } = useSession()
 
-    // Columns
+    useEffect(() => {
+        setIsLoading(true);
+        fetchMembers(setMemberData, setError)
+            .finally(() => setIsLoading(false));
+    }, []);
+
+    useEffect(() => {
+        if (filterDatas.page >= 0) {
+            fetchMembersByFilter(setMemberData, param, filterDatas, setError);
+        }
+    }, [filterDatas]);
+
+
     const columns = [
+        {
+            Header: 'No',
+            accessor: 'number',
+        },
         {
             Header: 'Member ID',
             accessor: 'memberId',
@@ -106,20 +79,45 @@ const MembersEditPage = () => {
         },
     ];
 
-    const [showFilter, setShowFilter] = useState(false);
-    const [selectedRows, setSelectedRows] = useState([]);
-
     const handleSearch = (query) => {
+        const keyword =
+            {
+                page: page,
+                searchTerm: query
+            }
+
+        fetchMembersBykeyword(setMemberData, param, keyword, setError)
         console.log(`검색어: ${query}`);
     };
 
-    const toggleFilter= () => {
+    if (error) {
+        return <div>에러가 발생했습니다: {error}</div>;
+    }
+
+    const toggleFilter = () => {
         setShowFilter((prev) => !prev);
     }
     const handleApprove = () => {
-        const approvedData = selectedRows.map((index) => data[index]);
-        alert(`${approvedData.length}개의 행이 승인되었습니다.`);
-        setSelectedRows([]);
+        alert(`${selectedRows.length}개의 행이 승인되었습니다.`);
+        let keywordList = []
+        selectedRows.map((row) => {
+            memberData.content.map((data, index) => {
+                if (row === index) {
+                    keywordList.push({
+                        adminId: session.memberId,
+                        memberId: data.memberId,
+                        role: "SUSPENDED_MEMBER",
+                        secondaryAuthCode: process.env.NEXT_PUBLIC_SECONDARY_CODE
+                    })
+                }
+            })
+        })
+        keywordList.map((data) => {
+            PatchMemberRole(data, setError)
+        })
+        setTimeout(() => {
+            fetchMembers(setMemberData, setError);
+        }, 500);
     };
 
     return (
@@ -132,24 +130,139 @@ const MembersEditPage = () => {
                         </SubmitButtonV2>
                     </div>
                     <div className="items-center flex space-x-10">
-                        <SearchBar onSearch={handleSearch}/>
-                        <FilterButton onClick={toggleFilter}/>
+                        <SearchBar onSearch={handleSearch} />
+                        <FilterButton onClick={toggleFilter} />
                     </div>
                 </div>
                 {showFilter && (
                     <div className="absolute right-6 z-10">
-                        <FilterConditions currentPage="members"/>
+                        <FilterConditions currentPage="members" setFilterData={setFilterData} page={page} setPage={setPage} totalPage={memberData.totalPage} />
                     </div>
                 )}
             </div>
+            {isLoading ? (
+                <div className="p-6">
+                    <SkeletonLoader />
+                </div>
+            ) : (
             <CheckBoxTable
                 columns={columns}
-                data={data}
+                data={memberData.content}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
+                totalPage={memberData.totalPage}
+                filterDatas={filterDatas}
+                setFilterData={setFilterData}
+                page={page}
+                setPage={setPage}
             />
+            )}
         </div>
     );
 };
+
+async function fetchMembers(setMemberData, setError) {
+    try {
+        const response = await fetch(`/api/members/searchMember`, {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setMemberData(data.data);
+    } catch (error) {
+        console.error('Error - 이용자 불러오기: ', error.message);
+        setError(error.message);
+    }
+}
+
+async function fetchMembersByFilter(setMemberData, param, filterDatas, setError) {
+    param.append("page", filterDatas.page)
+    param.append("sortDirection", filterDatas.sortDirection)
+    param.append("memberRole", filterDatas.memberRole)
+    try {
+        const response = await fetch(`/api/members/searchMemberByFilter?${param}`, {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setMemberData(data.data);
+    } catch (error) {
+        console.error('Error - 이용자 불러오기: ', error.message);
+        setError(error.message);
+    }
+}
+
+async function fetchMembersBykeyword(setMemberData, param, filterDatas, setError) {
+    param.append("page", filterDatas.page)
+    param.append("searchTerm", filterDatas.searchTerm)
+    try {
+        const response = await fetch(`/api/members/searchMemberByKeyword?${param}`, {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setMemberData(data.data);
+    } catch (error) {
+        console.error('Error - 이용자 불러오기: ', error.message);
+        setError(error.message);
+    }
+}
+
+
+async function PatchMemberRole(filterDatas, setError) {
+
+    try {
+        const response = await fetch(`/api/members/memberRoleChange`, {
+            method: "PATCH",
+            cache: "no-store",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                adminId: filterDatas.adminId,
+                memberId: filterDatas.memberId,
+                role: filterDatas.role,
+                secondaryAuthCode: filterDatas.secondaryAuthCode
+            })
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.message || `HTTP error! status: ${response.status}`);
+        }
+
+    } catch (error) {
+        console.error('Error - 이용자 불러오기: ', error.message);
+        setError(error.message);
+    }
+}
 
 export default MembersEditPage;

@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import SubmitButton from "../../components/button/submitButton";
 
-const PendingConditions = () => {
-    const [page, setPage] = useState(0);
+const PendingConditions = ({setFilterData, page, setPage, dataPage}) => {
     const [sortDirection, setSortDirection] = useState("DESC");
     const handlePageChange = (e) => setPage(e.target.value);
     const handleSortDirectionChange = (e) => setSortDirection(e.target.value);
     const handleApplyFilter = () => {
         const filterData = { page, sortDirection };
-        console.log("필터 적용:", filterData);
+        setFilterData(filterData)
     };
+
 
     return (
         <div className="w-[200px] mt-4 p-4 border rounded-md bg-gray-100">
@@ -23,7 +23,7 @@ const PendingConditions = () => {
                         <input
                             id="page"
                             type="number"
-                            value={page}
+                            value={page + 1}
                             onChange={handlePageChange}
                             className="w-full p-2 border rounded-md"
                             min="0"

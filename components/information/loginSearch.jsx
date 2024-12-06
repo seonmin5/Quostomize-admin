@@ -3,11 +3,9 @@
 import FilterButton from "../../components/button/filterButton";
 import FilterConditions from "../../components/button/filterConditionByLoginLog";
 import { loginSearchColumn } from "../../components/column/loginSearchColumn"
-import { loginInfo, loginInfoByFilter } from "../apiMethodList/loginSearch/get"
+import { loginInfo, loginInfoByFilter } from "../../service/apiMethodList/loginSearch/get"
 import { useEffect, useState } from "react";
 
-
-// test
 import DataTable from "../table/loginDataTable";
 
 const LoginSearchPage = () => {
@@ -25,7 +23,6 @@ const LoginSearchPage = () => {
         filterDatas.page >= 0 ? loginInfoByFilter(setLoginInfos, param, filterDatas) : null
     }, [filterDatas])
 
-    // Columns 정의
     const columns = loginSearchColumn()
 
     const toggleFilter = () => {

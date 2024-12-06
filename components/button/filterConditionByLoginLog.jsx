@@ -7,7 +7,8 @@ const FilterConditions = ({ currentPage, setFilterData, page, setPage, dataPage 
     const [sortDirection, setSortDirection] = useState("DESC");
 
     const filterOptions = {
-        loginlog: ['page', 'size', 'sortBy', 'direction']
+        loginlog: ['page', 'size', 'sortBy', 'direction'],
+        notilog: ['page', 'size', 'sortBy', 'direction']
     };
 
     const handlePageChange = (e) => setPage(e.target.value - 1);
