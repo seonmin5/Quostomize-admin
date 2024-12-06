@@ -48,8 +48,8 @@ const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, totalPage
     };
 
     return (
-        <div className="w-full">
-            <table className="min-w-full bg-white">
+        <div className="max-w-full">
+            <table className="min-w-[95%] bg-white">
                 <thead>
                 <tr>
                     <th className="px-4 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -109,8 +109,12 @@ const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, totalPage
                     onClick={() => {
                         setPage((prev) => Math.max(0, prev - 1))
                         filterDatas.page >= 0
-                            ? setFilterData({ page: Math.max(0, page - 1), sortDirection: filterDatas.sortDirection, memberRole: filterDatas.memberRole })
-                            : setFilterData({ page: Math.max(0, page - 1), sortDirection: "", memberRole: "" })
+                            ? setFilterData({
+                                page: Math.max(0, page - 1),
+                                sortDirection: filterDatas.sortDirection,
+                                memberRole: filterDatas.memberRole
+                            })
+                            : setFilterData({page: Math.max(0, page - 1), sortDirection: "", memberRole: ""})
                     }}
                     disabled={page === 0}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
@@ -124,8 +128,16 @@ const CheckBoxTable = ({ columns, data, selectedRows, setSelectedRows, totalPage
                     onClick={() => {
                         setPage((prev) => Math.min(totalPages - 1, prev + 1))
                         filterDatas.page >= 0
-                            ? setFilterData({ page: Math.min(totalPages - 1, page + 1), sortDirection: filterDatas.sortDirection, memberRole: filterDatas.memberRole })
-                            : setFilterData({ page: Math.min(totalPages - 1, page + 1), sortDirection: "", memberRole: "" })
+                            ? setFilterData({
+                                page: Math.min(totalPages - 1, page + 1),
+                                sortDirection: filterDatas.sortDirection,
+                                memberRole: filterDatas.memberRole
+                            })
+                            : setFilterData({
+                                page: Math.min(totalPages - 1, page + 1),
+                                sortDirection: "",
+                                memberRole: ""
+                            })
                     }}
                     disabled={page === totalPages - 1}
                     className="px-4 py-2 border rounded text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"

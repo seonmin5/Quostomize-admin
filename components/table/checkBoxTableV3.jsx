@@ -55,8 +55,8 @@ const CheckBoxTableV3 = ({
     if (!data) return <div>데이터 불러오는 중...</div>;
 
     return (
-        <div className="w-full">
-            <table className="min-w-full bg-white">
+        <div className="max-w-full">
+            <table className="min-w-[95%] bg-white">
                 <thead>
                 <tr>
                     <th className="px-4 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">

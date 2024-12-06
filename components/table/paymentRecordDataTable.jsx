@@ -21,8 +21,7 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
             return formatBoolean(value);
         }
         if (value && typeof value === 'object' && ('_year' in value || '_date' in value)) {
-            // LocalDate 또는 LocalDateTime 객체 처리
-            const dateString = value.toString(); // LocalDate/LocalDateTime의 toString() 메서드 사용
+            const dateString = value.toString();
             const parsedDate = parseISO(dateString);
             return isValid(parsedDate) ? format(parsedDate, 'yyyy-MM-dd HH:mm:ss') : dateString;
         }
@@ -33,27 +32,29 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
     };
 
     return (
-        <div className="w-full">
-            <table className="min-w-full bg-white">
+        <div className="max-w-full">
+            <table className="min-w-[95%] bg-white">
                 <thead>
-                    <tr>
-                        {columns.map((column) => (
-                            <th key={column.accessor} className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                {column.Header}
-                            </th>
-                        ))}
-                    </tr>
+                <tr>
+                    {columns.map((column) => (
+                        <th key={column.accessor}
+                            className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            {column.Header}
+                        </th>
+                    ))}
+                </tr>
                 </thead>
                 <tbody>
-                    {data?.map((row, rowIndex) => (
-                        <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                            {columns.map((column) => (
-                                <td key={`${rowIndex}-${column.accessor}`} className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                    {renderCellValue(row[column.accessor], column.accessor)}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
+                {data?.map((row, rowIndex) => (
+                    <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        {columns.map((column) => (
+                            <td key={`${rowIndex}-${column.accessor}`}
+                                className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                {renderCellValue(row[column.accessor], column.accessor)}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
                 </tbody>
             </table>
 
@@ -63,10 +64,14 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
                         setPage(prev => Math.max(0, prev - 1));
                         Object.keys(filterDatas).length < 3
                             ? setFilterData(filterDatas.page >= 0
-                                ? { page: Math.max(0, page - 1), sortDirection: filterDatas.sortDirection }
-                                : { page: Math.max(0, page - 1), sortDirection: "DESC" })
+                                ? {page: Math.max(0, page - 1), sortDirection: filterDatas.sortDirection}
+                                : {page: Math.max(0, page - 1), sortDirection: "DESC"})
                             : setFilterData(filterDatas.page >= 0
-                                ? { page: Math.max(0, page - 1), searchAmount: filterDatas.searchAmount, searchType: filterDatas.searchType }
+                                ? {
+                                    page: Math.max(0, page - 1),
+                                    searchAmount: filterDatas.searchAmount,
+                                    searchType: filterDatas.searchType
+                                }
                                 : null)
                     }}
                     disabled={page === 0}
@@ -82,10 +87,14 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
                         setPage(prev => Math.min(totalPages - 1, prev + 1));
                         Object.keys(filterDatas).length < 3
                             ? setFilterData(filterDatas.page >= 0
-                                ? { page: Math.min(totalPages - 1, page + 1), sortDirection: filterDatas.sortDirection }
-                                : { page: Math.min(totalPages - 1, page + 1), sortDirection: "DESC" })
+                                ? {page: Math.min(totalPages - 1, page + 1), sortDirection: filterDatas.sortDirection}
+                                : {page: Math.min(totalPages - 1, page + 1), sortDirection: "DESC"})
                             : setFilterData(filterDatas.page >= 0
-                                ? { page: Math.min(totalPages - 1, page + 1), searchAmount: filterDatas.searchAmount, searchType: filterDatas.searchType }
+                                ? {
+                                    page: Math.min(totalPages - 1, page + 1),
+                                    searchAmount: filterDatas.searchAmount,
+                                    searchType: filterDatas.searchType
+                                }
                                 : null)
                     }}
                     disabled={page === totalPages - 1}

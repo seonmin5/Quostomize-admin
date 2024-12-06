@@ -21,8 +21,7 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
             return formatBoolean(value);
         }
         if (value && typeof value === 'object' && ('_year' in value || '_date' in value)) {
-            // LocalDate 또는 LocalDateTime 객체 처리
-            const dateString = value.toString(); // LocalDate/LocalDateTime의 toString() 메서드 사용
+            const dateString = value.toString();
             const parsedDate = parseISO(dateString);
             return isValid(parsedDate) ? format(parsedDate, 'yyyy-MM-dd HH:mm:ss') : dateString;
         }
@@ -33,8 +32,8 @@ const DataTable = ({ columns, data, dataPage, setFilterData, filterDatas, page, 
     };
 
     return (
-        <div className="w-full">
-            <table className="min-w-full bg-white">
+        <div className="max-w-full">
+            <table className="min-w-[95%] bg-white">
                 <thead>
                     <tr>
                         {columns.map((column) => (
