@@ -25,10 +25,10 @@ const SideNav = async () => {
 
   return (
       <div className="w-60 min-h-[2200px] bg-[#2C2C2C]">
-          <div className="p-8 border-b border-[#000000] text-white">
+          <div className="p-4 pt-8 border-b border-[#000000] text-white">
               <div className="flex items-center mb-6">
-                  <div className="text-xl font-bold flex items-center">
-                      WON 커스터마이징
+                  <div className="text-[20px] font-bold flex items-center">
+                      <img src="/icons/woori_ci.png" className="w-10 pr-1" /> WON 커스터마이징
                   </div>
               </div>
               <div className="text-gray-300 text-sm">{session.memberName}</div>
