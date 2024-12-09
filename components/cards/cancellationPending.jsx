@@ -46,7 +46,7 @@ const CancellationPendingPage = () => {
 
     useEffect(() => {
         if (filterData.page >= 0) {
-            const fetchFilteredData = async () => {
+            const fetchFilteredData = async (setCardInfo, param, filterData) => {
                 try {
                     const response = await CardInfoByFilter(setCardInfo, param, filterData);
                     setCardInfo(response);
@@ -54,7 +54,7 @@ const CancellationPendingPage = () => {
                     console.error("Error fetching filtered data:", err);
                 }
             };
-            fetchFilteredData();
+            fetchFilteredData(setCardInfo, param, filterData);
         }
     }, [filterData]);
 
