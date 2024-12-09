@@ -100,51 +100,59 @@ export const authConfig = {
         memberPassword: { label: "비밀번호", type: "text" },
       },
       async authorize(credentials, req) {
-        const response = await fetch(
-          `${process.env.SERVER_URL}/login`,
-          {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-              memberLoginId: credentials.memberLoginId,
-              memberPassword: credentials.memberPassword
-            })
+        try {
+          const response = await fetch(
+            `${process.env.SERVER_URL}/login`,
+            {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json"
+              },
+              body: JSON.stringify({
+                memberLoginId: credentials.memberLoginId,
+                memberPassword: credentials.memberPassword
+              })
+            }
+          );
+
+          if (response.status >= 400) {
+            throw new Error("아이디, 비밀번호를 확인해주세요.")
           }
-        );
 
-        if (response.status >= 400) {
-          throw new Error("아이디, 비밀번호를 확인해주세요.")
+          const accessToken = response.headers.get("accessToken");
+          const setCookie = response.headers.get("set-cookie").split(";");
+          const refreshToken = setCookie[0].split("=")[1];
+          const expires = setCookie[2].split("=")[1];
+          const path = setCookie[3].split("=")[1];
+  
+          const result = await response.json();
+          const memberId = result.memberId;
+          const memberRole = result.memberRole;
+          const memberName = result.memberName;
+          const memberLoginId = credentials.memberLoginId;
+          const traceId = result.traceId;
+  
+          if (memberRole !== "ROLE_ADMIN") {
+            throw new Error("관리자 계정이 아닙니다.\n관리자 계정으로 다시 시도해주세요.")
+          }
+  
+          const user = {
+            id: memberId,
+            name: memberName,
+            loginId: memberLoginId,
+            role: memberRole,
+            traceId: traceId,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            accessExpires: new Date().valueOf() + 1800000,
+            refreshExpires: expires,
+            path: path,
+          }
+          
+          return user;
+        } catch (err) {
+          throw new Error(err.message); 
         }
-
-        const accessToken = response.headers.get("accessToken");
-        const setCookie = response.headers.get("set-cookie").split(";");
-        const refreshToken = setCookie[0].split("=")[1];
-        const expires = setCookie[2].split("=")[1];
-        const path = setCookie[3].split("=")[1];
-
-        const result = await response.json();
-        const memberId = result.memberId;
-        const memberRole = result.memberRole;
-        const memberName = result.memberName;
-        const memberLoginId = credentials.memberLoginId;
-        const traceId = result.traceId;
-
-        const user = {
-          id: memberId,
-          name: memberName,
-          loginId: memberLoginId,
-          role: memberRole,
-          traceId: traceId,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          accessExpires: new Date().valueOf() + 1800000,
-          refreshExpires: expires,
-          path: path,
-        }
-        
-        return user;
       }
     })
   ],
@@ -182,7 +190,7 @@ export const authConfig = {
         return await TokenRefreshManager.getInstance().refreshToken(token);
       } catch (error) {
         await signOut({
-          redirectTo: "login",
+          redirectTo: "/",
           redirect: true
         })
         return {

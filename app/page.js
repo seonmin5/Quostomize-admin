@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 
 import LoadingModal from '../components/modal/loadingModal';
 import LoginForm from '../components/login/LoginForm';
+import AlertModal from '../components/modal/alertModal';
 
 const LoginPage = () => {
   const { data: session } = useSession();
@@ -17,7 +18,7 @@ const LoginPage = () => {
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (session) {
@@ -35,32 +36,27 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    let isAuthed = true;
     setIsLoading(true);
 
-    try {
-      const response = await signIn('credentials', {
-        memberLoginId: formData.memberLoginId,
-        memberPassword: formData.memberPassword,
-        redirect: false,
-      });
-      if (response.error) {
-        setSuccess(false);
-        setTimeout(() => {
-          setShowAlertModal(true);
-          isAuthed = false;
-        },0)
-      } else {
-        setSuccess(true);
+    const response = await signIn('credentials', {
+      memberLoginId: formData.memberLoginId,
+      memberPassword: formData.memberPassword,
+      redirect: false, 
+    })
+    setIsLoading(false);
 
-      }
-    } catch (err) {
-      isAuthed = false;
-      setShowAlertModal(true);
-    } finally {
-      setIsLoading(false);
-      router.push('/information');
+    if (response.error) {
+      setErrorMessage("아이디, 비밀번호를\n다시 확인해주세요")
+      setTimeout(() => {
+        setShowAlertModal(true);
+      },0)
+      setTimeout(() => {
+        setShowAlertModal(false);
+      },2000)
+      return
     }
+
+    router.push('/information');
   };
 
   const handleInputChange = (e) => {
@@ -98,6 +94,7 @@ const LoginPage = () => {
           </div>
       </div>
       <LoadingModal message={"로그인 중입니다"} isOpen={isLoading} />
+      <AlertModal title={"로그인 실패"} isOpen={showAlertModal} setIsOpen={setShowAlertModal} description={errorMessage} />
     </div>
   );
 };
