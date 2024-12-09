@@ -11,7 +11,7 @@ export async function GET(request) {
     const status = url.searchParams.get("status")
     const param = new URLSearchParams({ page, sortDirection, status })
 
-    const response = await fetch(`http://localhost:8080/v1/api/admin/card-info?${param}`, // 서버 엔드포인트 지정
+    const response = await fetch(`${process.env.SERVER_URL}/v1/api/admin/card-info?${param}`, // 서버 엔드포인트 지정
         {
             method: "GET",
             headers: {

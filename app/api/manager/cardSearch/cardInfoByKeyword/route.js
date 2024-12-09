@@ -10,7 +10,7 @@ export async function GET(request) {
     const searchTerm = url.searchParams.get("searchTerm")
     const param = new URLSearchParams({ page, searchTerm })
 
-    const response = await fetch(`http://localhost:8080/v1/api/admin/card-search?${param}`, // 서버 엔드포인트 지정
+    const response = await fetch(`${process.env.SERVER_URL}/v1/api/admin/card-search?${param}`, // 서버 엔드포인트 지정
         {
             method: "GET",
             headers: {
