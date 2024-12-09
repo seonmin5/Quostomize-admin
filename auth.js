@@ -156,7 +156,7 @@ export const authConfig = {
       }
     })
   ],
-  secret: process.env.NEXT_SECRET,
+  secret: process.env.AUTH_SECRET,
   pages: {
     signIn: '/',
   },
