@@ -17,11 +17,30 @@ export default auth((req) => {
             );  
         }
     }
+
+    if (!session.memberRole !== "ROLE_ADMIN") {  
+        console.error('Not Admin, redirecting to login');
+        if (goalURL !== "login") {
+            return NextResponse.redirect(
+                new URL(`/login?to=${goalURL}`, req.url)
+            );  
+        } else {
+            return NextResponse.redirect(
+                new URL(`/login`, req.url)
+            );  
+        }
+    }
     
     return NextResponse.next();
 });
 
 export const config = {  
     matcher: [
+        "/cards/:path*",
+        "/franchises/:path*",
+        "/information/:path*",
+        "/members/:path*",
+        "/notifications/:path*",
+        "/setting/:path*",
     ] 
 };
