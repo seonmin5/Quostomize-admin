@@ -1,4 +1,4 @@
-![reade_관리자_v3](https://github.com/user-attachments/assets/bc917619-700e-45b0-a203-69252560b251)
+![readme_관리자_v3](https://github.com/user-attachments/assets/288e1653-9493-4a24-ba00-1ce1fd54897b)
 # 📌 Quostomize-admin: 관리자 페이지
 ## 📝 프로젝트 소개
 우리 커스터마이징 서비스(QUOSTOMIZE)를 위한 관리자 페이지입니다.
@@ -38,12 +38,6 @@
 1. 커밋 푸시: Github에 브랜치로 푸시합니다.
 2. Vercel 배포: 메인 브랜치 병합 후 Vercel에 배포합니다.
 3. 실시간 업데이트: Vercel을 통해 관리자 사이트가 즉시 업데이트됩니다.
-<br>
-
-## 🚨트러블 슈팅
-**로그 출력 순서**
-- 문제: 멀티 쓰레드 환경에서 동시에 여러 요청이 처리되기 때문에 동일한 요청에 대한 **로그가 순서없이 쌓여, 로그 추적이 어려웠습니다.**
-- 해결: **MDC**를 Spring Filter 가장 앞단에 적용하여 다양한 시큐리티 필터보다 먼저 적용되도록 해 순서대로 로그가 쌓이게 했습니다. **traceId** 키 값을 설정하여 요청별 고유한 uuid를 생성하며, 이를 로그 추적에 활용하였습니다.
 <br>
 
 ## 🗂️ 주요 폴더 구조
@@ -90,11 +84,6 @@ root/
 └── postcss.config.js
 ```
 <br>
-**백엔드**
-```
-```
-<br>
-
 
 ## 📅 진행 일정 (13Days)
 - 프로젝트 시작일: 2024.11.27.
@@ -202,11 +191,6 @@ Feat/input : 비밀번호 숨김 처리
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/kimh7537">
-        <img src="https://github.com/kimh7537.png" alt="김현우" width="150" height="150"/>
-      </a>
-    </td>
-    <td align="center">
       <a href="https://github.com/seonmin5">
         <img src="https://github.com/seonmin5.png" alt="오선민" width="150" height="150"/>
       </a>
@@ -229,11 +213,6 @@ Feat/input : 비밀번호 숨김 처리
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/kimh7537">
-        <b>김현우</b>
-      </a>
-    </td>
-    <td align="center">
       <a href="https://github.com/seonmin5">
         <b>오선민</b>
       </a>
@@ -245,11 +224,6 @@ Feat/input : 비밀번호 숨김 처리
     </td>
   </tr>
   <tr>
-    <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
     <td align="center">
       내용 입력 <br>
       내용 입력 <br>
