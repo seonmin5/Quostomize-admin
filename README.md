@@ -18,27 +18,28 @@
 ## 🔧 주요 기능
 - **정보 조회**: 관리자가 다양한 정보(이용자, 카드, 가맹점 등)를 조회할 수 있습니다.
 - **알림 메일 발송**: 관리자가 이메일을 통해 알림을 발송할 수 있는 기능입니다.
-![커스터 마이징 서비스 (5)](https://github.com/user-attachments/assets/f9334aa2-84f1-4ad4-81fd-7540a9389de2)
+![커스터 마이징 서비스 (5)](https://github.com/user-attachments/assets/30e41714-ea14-475e-af8a-370fd970cda3)
 
 
 - **서비스 관리**: 이용자, 카드, 가맹점 관리 기능을 제공합니다.
-![커스터 마이징 서비스 (6)](https://github.com/user-attachments/assets/1d3c9ccf-d4eb-473a-8656-a91c3b1b8ced)
+![커스터 마이징 서비스 (6)](https://github.com/user-attachments/assets/1b8cbbf3-1a14-47df-bca3-5d73073fef26)
 
 
 - **로그 관리**: MDC(Mapped Diagnostic Context) 필터를 적용하여 로그를 순차적으로 관리하고 분석할 수 있습니다.
-![53](https://github.com/user-attachments/assets/95f2690a-ea8e-4560-8123-2c48c2ab60f8)
-
-![54](https://github.com/user-attachments/assets/3473ca5d-82a8-46d9-971e-89c27271a158)
+![53](https://github.com/user-attachments/assets/d2bc7807-dbe0-4eb2-8dc2-96fda778b072)
+![54](https://github.com/user-attachments/assets/e537c5f8-eec2-4c03-b740-002a7ccb05ea)
 
 
 <br>
 
 ## 🌟 추가 구현사항 
 - **모니터링**: Grafana를 통해 시스템 상태를 실시간으로 모니터링하고 문제를 즉시 대응할 수 있도록 합니다.
-![커스터 마이징 서비스 (7)](https://github.com/user-attachments/assets/649bf739-7335-4c6d-a5a0-f8a64315e1d0)
+![커스터 마이징 서비스 (7)](https://github.com/user-attachments/assets/314f1451-b8ab-4e09-89f2-d342515b01d6)
 
 
 <br>
+
+---
 
 ## ⚙️ 기술 스택
 ![image](https://github.com/user-attachments/assets/580632dd-5717-49b5-9fb7-1658a2b68a2a)
@@ -55,7 +56,7 @@
 3. 실시간 업데이트: Vercel을 통해 관리자 사이트가 즉시 업데이트됩니다.
 <br>
 
-## 🖥️ 인프라 구조도
+## 📊 인프라 구조도
 ![image](https://github.com/user-attachments/assets/aeb76baa-ece2-40fd-8ed6-18205d223d69)
 
 
