@@ -18,17 +18,32 @@
 ## 🔧 주요 기능
 - **정보 조회**: 관리자가 다양한 정보(이용자, 카드, 가맹점 등)를 조회할 수 있습니다.
 - **알림 메일 발송**: 관리자가 이메일을 통해 알림을 발송할 수 있는 기능입니다.
+![커스터 마이징 서비스 (5)](https://github.com/user-attachments/assets/f9334aa2-84f1-4ad4-81fd-7540a9389de2)
+
+
 - **서비스 관리**: 이용자, 카드, 가맹점 관리 기능을 제공합니다.
+![커스터 마이징 서비스 (6)](https://github.com/user-attachments/assets/1d3c9ccf-d4eb-473a-8656-a91c3b1b8ced)
+
+
 - **로그 관리**: MDC(Mapped Diagnostic Context) 필터를 적용하여 로그를 순차적으로 관리하고 분석할 수 있습니다.
+![53](https://github.com/user-attachments/assets/95f2690a-ea8e-4560-8123-2c48c2ab60f8)
+
+![54](https://github.com/user-attachments/assets/3473ca5d-82a8-46d9-971e-89c27271a158)
+
+
 <br>
 
 ## 🌟 추가 구현사항 
 - **모니터링**: Grafana를 통해 시스템 상태를 실시간으로 모니터링하고 문제를 즉시 대응할 수 있도록 합니다.
+![커스터 마이징 서비스 (7)](https://github.com/user-attachments/assets/649bf739-7335-4c6d-a5a0-f8a64315e1d0)
+
+
 <br>
 
 ## ⚙️ 기술 스택
-- 
+![커스터 마이징 서비스](https://github.com/user-attachments/assets/e39930b0-e8e0-450d-a3cb-465df691d9ef)
 <br>
+
 
 ## 🌐 배포 파이프라인
 관리자 페이지는 Vercel을 이용해 배포를 진행하였습니다. Vercel 대시보드를 통해 배포 상태를 한눈에 확인할 수 있습니다.
@@ -39,6 +54,10 @@
 2. Vercel 배포: 메인 브랜치 병합 후 Vercel에 배포합니다.
 3. 실시간 업데이트: Vercel을 통해 관리자 사이트가 즉시 업데이트됩니다.
 <br>
+
+## 🖥️ 인프라 구조도
+![image](https://github.com/user-attachments/assets/aeb76baa-ece2-40fd-8ed6-18205d223d69)
+
 
 ## 🗂️ 주요 폴더 구조
 **프론트엔드**
@@ -90,9 +109,6 @@ root/
 - 프로젝트 종료일: 2024.12.09.
 <br>
 
-## 🖥️ 개발 환경
-- 
-<br>
 
 ## ✍️ 컨벤션
 **커밋 컨벤션**
@@ -191,6 +207,16 @@ Feat/input : 비밀번호 숨김 처리
       </a>
     </td>
     <td align="center">
+      <a href="https://github.com/kimh7537">
+        <img src="https://github.com/kimh7537.png" alt="김현우" width="150" height="150"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/bangsk2">
+        <img src="https://github.com/bangsk2.png" alt="방성경" width="150" height="150"/>
+      </a>
+    </td>
+    <td align="center">
       <a href="https://github.com/seonmin5">
         <img src="https://github.com/seonmin5.png" alt="오선민" width="150" height="150"/>
       </a>
@@ -213,6 +239,16 @@ Feat/input : 비밀번호 숨김 처리
       </a>
     </td>
     <td align="center">
+      <a href="https://github.com/kimh7537">
+        <b>김현우</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/bangsk2">
+        <b>방성경</b>
+      </a>
+    </td>
+    <td align="center">
       <a href="https://github.com/seonmin5">
         <b>오선민</b>
       </a>
@@ -224,10 +260,28 @@ Feat/input : 비밀번호 숨김 처리
     </td>
   </tr>
   <tr>
+   <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
+   <td align="center">FullStack 개발 팀원</td>
+   <td align="center">Backend 팀장<br/>FullStack 개발</td>
+   <td align="center">FullStack 개발 팀원</td>
+   <td align="center">PM 팀장<br/>FullStack 개발 팀원</td>
+   <td align="center">FullStack 개발 팀원</td>
+ </tr>
+  <tr>
+    <td align="center">
+      스프링 배치 복권 기능 구현 <br>
+      내용 입력 <br>
+      내용 입력
+    </td>
     <td align="center">
       내용 입력 <br>
       내용 입력 <br>
       내용 입력
+    </td>
+    <td align="center">
+      인증, 인가 구현 <br>
+      CICD & 인프라 구축 <br>
+      백엔드 프로젝트 세팅
     </td>
     <td align="center">
       내용 입력 <br>
@@ -240,7 +294,7 @@ Feat/input : 비밀번호 숨김 처리
       내용 입력
     </td>
     <td align="center">
-      내용 입력 <br>
+      MDC 로깅 구현 <br>
       내용 입력 <br>
       내용 입력
     </td>
@@ -248,6 +302,41 @@ Feat/input : 비밀번호 숨김 처리
 </table>
 
 <br>
+
+## 👥 팀원 개인별 회고
+
+### 기남석
+- ~
+  
+### 김영성
+- ~
+
+### 김현우
+- ~
+
+### 방성경
+- ~
+
+### 오선민
+- ~
+
+### 홍찬의
+- ~
+
+<br>
+
+---
+[요구사항 정의서.pdf](https://github.com/user-attachments/files/18225291/default.pdf)
+
+[서비스 요구사항 정의서.pdf](https://github.com/user-attachments/files/18225293/default.pdf)
+
+[비즈니스프로세스모델.pdf](https://github.com/user-attachments/files/18225295/default.pdf)
+
+[WBS.pdf](https://github.com/user-attachments/files/18225296/WBS.pdf)
+
+[DB 설계서.pdf](https://github.com/user-attachments/files/18225297/DB.pdf)
+
+
 
 ## 🔗 관련 문서 링크
 - [Quostomize-BE](https://github.com/woorifisa-projects-3rd/Quostomize-BE)
