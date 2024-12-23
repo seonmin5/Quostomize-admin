@@ -295,9 +295,9 @@ Feat/input : 비밀번호 숨김 처리
   </tr>
   <tr>
     <td align="center">
-      - <br>
-      - <br>
-      -
+      프로젝트 세팅 <br>
+      SMTP 기반 이메일 전송 <br>
+      프론트 인증/인가
     </td>
     <td align="center">
       - <br>
