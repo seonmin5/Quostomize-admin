@@ -270,6 +270,49 @@ Feat/input : 비밀번호 숨김 처리
         <img src="https://github.com/kimh7537.png" alt="김현우" width="150" height="150"/>
       </a>
     </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Kee0304">
+        <b>기남석</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/newgamer11">
+        <b>김영성</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/kimh7537">
+        <b>김현우</b>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
+    <td align="center">FullStack 개발 팀원</td>
+    <td align="center">Backend 팀장<br/>FullStack 개발</td>
+  </tr>
+  <tr>
+    <td align="center">
+      - <br>
+      - <br>
+      -
+    </td>
+    <td align="center">
+      - <br>
+      - <br>
+      -
+    </td>
+    <td align="center">
+      - <br>
+      - <br>
+      -
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
     <td align="center">
       <a href="https://github.com/bangsk2">
         <img src="https://github.com/bangsk2.png" alt="방성경" width="150" height="150"/>
@@ -286,22 +329,7 @@ Feat/input : 비밀번호 숨김 처리
       </a>
     </td>
   </tr>
-   <tr>
-    <td align="center">
-      <a href="https://github.com/Kee0304">
-        <b>기남석</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/newgamer11">
-        <b>김영성</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/kimh7537">
-        <b>김현우</b>
-      </a>
-    </td>
+  <tr>
     <td align="center">
       <a href="https://github.com/bangsk2">
         <b>방성경</b>
@@ -319,70 +347,36 @@ Feat/input : 비밀번호 숨김 처리
     </td>
   </tr>
   <tr>
-   <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
-   <td align="center">FullStack 개발 팀원</td>
-   <td align="center">Backend 팀장<br/>FullStack 개발</td>
-   <td align="center">FullStack 개발 팀원</td>
-   <td align="center">PM 팀장<br/>FullStack 개발 팀원</td>
-   <td align="center">FullStack 개발 팀원</td>
- </tr>
+    <td align="center">FullStack 개발 팀원</td>
+    <td align="center">PM<br/>FullStack 개발 팀원</td>
+    <td align="center">FullStack 개발 팀원</td>
+  </tr>
   <tr>
     <td align="center">
-      스프링 배치 복권 기능 구현 <br>
-      내용 입력 <br>
-      내용 입력
+      - <br>
+      - <br>
+      -
     </td>
     <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
+      - <br>
+      - <br>
+      -
     </td>
     <td align="center">
-      인증, 인가 구현 <br>
-      CICD & 인프라 구축 <br>
-      백엔드 프로젝트 세팅
-    </td>
-    <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
-    <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
-    <td align="center">
-      MDC 로깅 구현 <br>
-      내용 입력 <br>
-      내용 입력
+      - <br>
+      - <br>
+      -
     </td>
   </tr>
 </table>
 
 <br>
 
-## 👥 팀원 개인별 회고
+---
 
-### 기남석
-- ~
-  
-### 김영성
-- ~
+## 📝 회고
+[팀원 최종 회고 작성](https://ohsanman.notion.site/b60218a5e80f4dc494dd02e4a0a0f976?pvs=4)
 
-### 김현우
-- ~
-
-### 방성경
-- ~
-
-### 오선민
-- ~
-
-### 홍찬의
-- ~
-
-<br>
 
 ---
 [요구사항 정의서.pdf](https://github.com/user-attachments/files/18225291/default.pdf)
