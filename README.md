@@ -41,7 +41,7 @@
 <br>
 
 ## ⚙️ 기술 스택
-![커스터 마이징 서비스](https://github.com/user-attachments/assets/e39930b0-e8e0-450d-a3cb-465df691d9ef)
+![image](https://github.com/user-attachments/assets/580632dd-5717-49b5-9fb7-1658a2b68a2a)
 <br>
 
 
@@ -107,6 +107,75 @@ root/
 ## 📅 진행 일정 (13Days)
 - 프로젝트 시작일: 2024.11.27.
 - 프로젝트 종료일: 2024.12.09.
+<br>
+
+
+## 💻 개발 환경
+<table>
+  <thead>
+    <tr>
+      <th>카테고리</th>
+      <th>라이브러리</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">프레임워크 & 코어</td>
+      <td><strong>Next.js</strong> (v14.2.19)</td>
+      <td>React 기반의 풀스택 웹 프레임워크로 SSR 및 SSG 지원</td>
+    </tr>
+    <tr>
+      <td><strong>React</strong> (v18.2.0)</td>
+      <td>선언형 사용자 인터페이스를 개발하기 위한 라이브러리</td>
+    </tr>
+    <tr>
+      <td rowspan="5">UI & 아이콘</td>
+      <td><strong>Ant Design</strong> (v5.22.3)</td>
+      <td>웹 애플리케이션 UI 컴포넌트 라이브러리, 빠르고 일관된 UI 구축 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Headless UI</strong> (v2.2.0)</td>
+      <td>접근성 표준을 준수하는 UI 컴포넌트 라이브러리, 디자인 커스터마이징 용이</td>
+    </tr>
+    <tr>
+      <td><strong>Ant Design Icons</strong> (v5.5.2)</td>
+      <td>Ant Design 스타일의 아이콘 세트 제공</td>
+    </tr>
+    <tr>
+      <td><strong>Material UI Icons</strong> (v6.1.9)</td>
+      <td>Material Design 기반의 아이콘 세트 제공</td>
+    </tr>
+    <tr>
+      <td><strong>React Icons</strong> (v5.4.0)</td>
+      <td>다양한 스타일의 아이콘 라이브러리 모음 제공</td>
+    </tr>
+    <tr>
+      <td rowspan="2">날짜 & 시간</td>
+      <td><strong>JS-Joda</strong> (v5.6.3)</td>
+      <td>불변성을 갖춘 날짜와 시간 처리 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>date-fns</strong> (v4.1.0)</td>
+      <td>JavaScript 날짜 처리 라이브러리, 간단하고 직관적인 API 제공</td>
+    </tr>
+    <tr>
+      <td>인증</td>
+      <td><strong>NextAuth.js</strong> (v5.0.0-beta.25)</td>
+      <td>OAuth, Credentials 등 다양한 인증 방식을 간편하게 구현</td>
+    </tr>
+    <tr>
+      <td rowspan="2">추가 기능</td>
+      <td><strong>React Paginate</strong> (v8.2.0)</td>
+      <td>효율적인 페이지네이션 기능을 제공하는 React 컴포넌트</td>
+    </tr>
+    <tr>
+      <td><strong>React Quill</strong> (v3.3.3)</td>
+      <td>리치 텍스트 편집기 라이브러리, 알림메일 입력 기능 구현</td>
+    </tr>
+  </tbody>
+</table>
+
 <br>
 
 
