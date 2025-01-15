@@ -301,9 +301,7 @@ Feat/input : 비밀번호 숨김 처리
       프론트 인증/인가
     </td>
     <td align="center">
-      - <br>
-      - <br>
-      -
+      정보 조회 페이지 API 연결 <br>
     </td>
     <td align="center">
       - <br>
